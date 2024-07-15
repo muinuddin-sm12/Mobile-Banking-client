@@ -27,9 +27,9 @@ const AuthProvider = ({ children }) => {
 
   const logOut = async () => {
     setLoading(true);
-    await axios("https://edu-circle-server.vercel.app/logout", {
-      withCredentials: true,
-    });
+    // await axios("https://edu-circle-server.vercel.app/logout", {
+    //   withCredentials: true,
+    // });
     return signOut(auth);
   };
 
