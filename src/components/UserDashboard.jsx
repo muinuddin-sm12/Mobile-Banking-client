@@ -5,6 +5,10 @@ import cashOut from "../../public/icons/cash-out.svg";
 import cashIn from "../../public/icons/cash-in.svg";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import SendMoney from "./modal/SendMoney";
+import CashOut from "./modal/CashOut";
+import CashIn from "./modal/CashIn";
 
 const UserDashboard = ({ user }) => {
   // const {name, email, number, image, status, role} = user;
@@ -12,6 +16,29 @@ const UserDashboard = ({ user }) => {
   const handleLogout = () => {
     toast.success("Successfully Logout");
     navigate("/");
+  };
+  // send money modal
+  const [isSendMoneyModalOpen, setSendMoneyModalOpen] = useState(false);
+  const [isCashOutModalOpen, setCashOutModalOpen] = useState(false);
+  const [isCashInModalOpen, setCashInModalOpen] = useState(false);
+
+  const openSendMoneyModal = () => {
+    setSendMoneyModalOpen(true);
+  };
+  const closeSendMoneyModal = () => {
+    setSendMoneyModalOpen(false);
+  };
+  const openCashOutModal = () => {
+    setCashOutModalOpen(true);
+  };
+  const closeCashOutModal = () => {
+    setCashOutModalOpen(false);
+  };
+  const openCashInModal = () => {
+    setCashInModalOpen(true);
+  };
+  const closeCashInModal = () => {
+    setCashInModalOpen(false);
   };
   return (
     <div className="flex justify-center items-center min-h-screen w-full">
@@ -25,12 +52,14 @@ const UserDashboard = ({ user }) => {
               <img className="object-cover" src={user?.image} alt="" />
             </div>
             {user?.status === "Pending" ? (
-              <span className="bg-yellow-100 px-2 py-1 rounded-full text-[12px] font-medium text-orange-400">Status: Pending</span>
+              <span className="bg-yellow-100 px-2 py-1 rounded-full text-[12px] font-medium text-orange-400">
+                Status: Pending
+              </span>
             ) : (
               <div className="text-green-700 flex items-center gap-1 bg-green-200 px-2 py-1 rounded-full text-[12px] font-medium ">
                 <span>Verified</span>
-                <MdVerified/>
-                </div>
+                <MdVerified />
+              </div>
             )}
             <div className="text-gray-700 font-medium mt-3">
               <table>
@@ -62,7 +91,7 @@ const UserDashboard = ({ user }) => {
         <div className="h-full w-full lg:w-1/2 p-6">
           <div className="flex justify-between items-center">
             <h3 className="text-gray-700 font-medium text-sm">
-              Total Balance : 00.00
+              Total Balance : 00.00 BDT
             </h3>
             {/* history button */}
             <button className="bg-[#bfdeff] px-3 py-1 rounded-full text-sm text-[#308cef] font-medium">
@@ -71,23 +100,41 @@ const UserDashboard = ({ user }) => {
           </div>
           <div className="flex justify-center mt-4">
             <div className="grid grid-cols-1 space-y-2 ">
-              <div className="h-20 w-[120px] cursor-pointer text-sm font-medium border flex flex-col items-center justify-center rounded-xl p-4 hover:shadow-sm hover:shadow-[#007BFF]">
-                <div>
-                  <img className="h-8 " src={sendMoney} alt="" />
+              <div>
+                <div
+                  onClick={openSendMoneyModal}
+                  className="h-20 w-[120px] cursor-pointer text-sm font-medium border flex flex-col items-center justify-center rounded-xl p-4 hover:shadow-sm hover:shadow-[#007BFF]"
+                >
+                  <div>
+                    <img className="h-8 " src={sendMoney} alt="" />
+                  </div>
+                  <span>Send Money</span>
                 </div>
-                <span>Send Money</span>
+                <SendMoney isOpen={isSendMoneyModalOpen} onRequestClose={closeSendMoneyModal} />
               </div>
-              <div className="h-20 w-[120px] cursor-pointer text-sm font-medium border flex flex-col items-center justify-center rounded-xl p-4 hover:shadow-sm hover:shadow-[#007BFF]">
-                <div>
-                  <img className="h-8 " src={cashOut} alt="" />
+              <div>
+                <div
+                  onClick={openCashOutModal}
+                  className="h-20 w-[120px] cursor-pointer text-sm font-medium border flex flex-col items-center justify-center rounded-xl p-4 hover:shadow-sm hover:shadow-[#007BFF]"
+                >
+                  <div>
+                    <img className="h-8 " src={cashOut} alt="" />
+                  </div>
+                  <span>Cash-Out</span>
                 </div>
-                <span>Cash-Out</span>
+                <CashOut isOpen={isCashOutModalOpen} onRequestClose={closeCashOutModal} />
               </div>
-              <div className="h-20 w-[120px] cursor-pointer text-sm font-medium border flex flex-col items-center justify-center rounded-xl p-4 hover:shadow-sm hover:shadow-[#007BFF]">
-                <div>
-                  <img className="h-8 " src={cashIn} alt="" />
+              <div>
+                <div
+                  onClick={openCashInModal}
+                  className="h-20 w-[120px] cursor-pointer text-sm font-medium border flex flex-col items-center justify-center rounded-xl p-4 hover:shadow-sm hover:shadow-[#007BFF]"
+                >
+                  <div>
+                    <img className="h-8 " src={cashIn} alt="" />
+                  </div>
+                  <span>Cash-In</span>
                 </div>
-                <span>Cash-In</span>
+                <CashIn isOpen={isCashInModalOpen} onRequestClose={closeCashInModal} />
               </div>
             </div>
           </div>
