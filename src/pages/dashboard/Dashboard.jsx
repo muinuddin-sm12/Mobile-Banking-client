@@ -9,7 +9,8 @@ import AgentDashboard from "../../components/AgentDashboard";
 const Dashboard = () => {
   const [users, setUsers] = useState([]);
   const location = useLocation();
-  const { email } = location.state;
+//   const { email } = location.state;
+  const email = location.state?.email || "";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,9 +31,9 @@ const Dashboard = () => {
   // console.log(currentUser)
   return (
     <div>
+      {currentUser?.role === "Agent" && <AgentDashboard user={currentUser} />}
       {currentUser?.role === "User" && <UserDashboard user={currentUser} />}
       {currentUser?.role === "Admin" && <AdminDashboard />}
-      {currentUser?.role === "Agent" && <AgentDashboard />}
     </div>
   );
 };

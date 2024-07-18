@@ -6,7 +6,10 @@ import { FaCrown } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
+    const [allUser, setAllUser] = useState([])
   const [users, setUsers] = useState([]);
+//   const [agent, setAgent] = useState([])
+  const [agentRequests, setAgentRequests] = useState([])
   const [userr] = useState([]);
   const [adminData, setAdminData] = useState('')
   const navigate = useNavigate();
@@ -24,12 +27,27 @@ const AdminDashboard = () => {
     };
     fetchData();
   }, []);
+  useEffect(() => {
+    const fetch = async () => {
+        try{
+            const response = await axios.get('http://localhost:9000/users')
+            setAllUser(response.data)
+        }catch(error){
+            console.log(error)
+        }
+    }
+    fetch()
+  },[])
+  useEffect(() => {
+    const agent = allUser.filter((u) => u.request === 'Pending' || u.request === 'Accepted')
+    setAgentRequests(agent)
+  },[allUser])
+
   const handleLogout = () => {
     navigate("/dashboard");
     toast.success("Successfully Logout");
   };
   const handleStatus = async (id) => {
-    // const data = users.find((u) => u?._id == id);
     try {
       const updatedUser = {
         status: "Verified",
@@ -39,8 +57,8 @@ const AdminDashboard = () => {
         `http://localhost:9000/users/${id}`,
         updatedUser
       );
-      const updatedUsers = users?.map((user) =>
-        user._id === id ? { ...user, status: response.data.status, balance: response.data.balance } : user
+      const updatedUsers = users?.map((u) =>
+        u._id === id ? { ...u, status: response.data.status, balance: response.data.balance } : u
       );
       setUsers(updatedUsers);
       toast.success("User verified successfully");
@@ -48,6 +66,29 @@ const AdminDashboard = () => {
       console.error("Error updating user status", error);
     }
   };
+  const handleRole = async (id) => {
+    try {
+      const updatedUser = {
+        role: "Agent",
+        request: "Accepted",
+        balance: 40000,
+      };
+      const response = await axios.put(
+        `http://localhost:9000/users/${id}`,
+        updatedUser
+      );
+      const updatedUsers = allUser?.map((user) =>
+        user._id === id ? { ...user, status: response.data.role, request: response.data.request, balance: response.data.balance } : user
+      );
+      console.log('update user', updatedUser)
+      setAllUser(updatedUsers);
+      toast.success("User Become Agent");
+    } catch (error) {
+      console.error("Error updating user status", error);
+    }
+  };
+//   console.log('all agent requested', allUser)
+  console.log('all agent requested', agentRequests)
   return (
     <div className="flex justify-center items-center w-full min-h-screen">
       <div className="lg:w-[900px] h-[421px] rounded-lg flex shadow-md border overflow-hidden">
@@ -96,7 +137,7 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="lg:w-[600px]">
+        <div className="lg:w-[600px] overflow-auto">
           <div className=" bg-[#90c4fd] p-6 flex justify-center">
             <div className="flex items-center border w-[400px] rounded-full overflow-hidden">
               <input
@@ -111,11 +152,63 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div>
-          <div className="p-6">
+          <div className="p-6 overflow-y-auto">
+            <h1 className=" font-medium">Agent Requests</h1>
+
+            {/* Agent Request  */}
+            <div className="overflow-x-auto mt-6">
+              <table className="min-w-full divide-y text-sm divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Email
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Request
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {agentRequests.map((data) => (
+                    <tr key={data._id}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.email}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.request === "Pending" ? (
+                          <div className="flex items-center gap-2">
+                            {/* <p className="font-medium">Pending</p> */}
+                            <button
+                              onClick={() => handleRole(data?._id)}
+                              className="bg-green-500 hover:bg-black text-white font-medium text-sm py-1 px-2 rounded"
+                            >
+                              Accept
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <p className="font-medium text-gray-700 text-sm">
+                              Accepted
+                            </p>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
             <h1 className=" font-medium">Manage Users</h1>
 
             {/* manage users */}
-            <div className="overflow-x-auto mt-6">
+            <div className="mt-6">
               <table className="min-w-full divide-y text-sm divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
@@ -190,7 +283,56 @@ const AdminDashboard = () => {
               </table>
             </div>
 
-            {/* Transa  ction history */}
+            <h1 className=" font-medium">History</h1>
+            {/* Transaction history */}
+            <div className="overflow-x-auto mt-6">
+              <table className="min-w-full divide-y text-sm divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Name
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Email
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {users?.map((data) => (
+                    <tr key={data._id}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.email}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.status === "Pending" ? (
+                          <div className="flex items-center gap-2">
+                            <p className="font-medium">Pending</p>
+                            <button
+                            //   onClick={() => handleStatus(data?._id)}
+                              className="bg-green-500 hover:bg-black text-white font-medium text-sm py-1 px-2 rounded"
+                            >
+                              Approve
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <p className="font-medium text-gray-700 text-sm">
+                              Verified
+                            </p>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

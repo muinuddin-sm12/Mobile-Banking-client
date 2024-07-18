@@ -5,22 +5,29 @@ import { useEffect, useState } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [users, setUsers] = useState([]);
+  // const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState({ users: [], requests: [] });
   const [email, setEmail] = useState("");
   const [pin, setPin] = useState("");
+  // const [loggedinUser, setLoggedinUser] = useState("")
 
-  console.log('email:' ,email)
+  // console.log('email:' ,email)
 
   useEffect(() => {
-    const fetchedData = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:9000/users");
-        setUsers(response.data);
+        const usersResponse = await axios.get("http://localhost:9000/users");
+        // const requestsResponse = await axios.get(
+        //   "http://localhost:9000/requests"
+        // );
+        // const combinedData = [...usersResponse.data, ...requestsResponse.data];
+        // s etUsers(combinedData);
+        setUsers(usersResponse.data)
       } catch (error) {
-        toast.error(error);
+        toast.error("Error fetching data: " + error.message);
       }
     };
-    fetchedData();
+    fetchData();
   }, []);
 
   console.log(users);
@@ -31,7 +38,7 @@ const Login = () => {
     );
     if (!user) {
       toast.error("User not exist");
-      return
+      return;
     }
     if (user.password != pin) {
       toast.error("Invalid Pin");
@@ -40,7 +47,7 @@ const Login = () => {
     try {
       // 1. sign in user
       toast.success("Signup Successful");
-      navigate('/dashboard',  { state: { email }});
+      navigate("/dashboard", { state: { email } });
     } catch (err) {
       toast.error(err.message);
     }

@@ -5,12 +5,16 @@ import cashOut from "../../public/icons/cash-out.svg";
 import cashIn from "../../public/icons/cash-in.svg";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SendMoney from "./modal/SendMoney";
 import CashOut from "./modal/CashOut";
 import CashIn from "./modal/CashIn";
+import axios from "axios";
 
 const UserDashboard = ({ user }) => {
+  const [requestData, setRequestData] = useState([])
+  const [users, setUsers] = useState([])
+  console.log(users, 'from user dashboard')
   // const {name, email, number, image, status, role} = user;
   const navigate = useNavigate();
   const handleLogout = () => {
@@ -22,24 +26,92 @@ const UserDashboard = ({ user }) => {
   const [isCashOutModalOpen, setCashOutModalOpen] = useState(false);
   const [isCashInModalOpen, setCashInModalOpen] = useState(false);
 
+  useEffect(() => {
+    const fetch = async() => {
+      try{
+        const {data} = await axios.get('http://localhost:9000/users')
+        setUsers(data)
+      }catch(error){
+        console.log(error)
+      }
+    }
+    fetch()
+  },[])
   const openSendMoneyModal = () => {
+    if (user.status !== "Verified") {
+      toast.error(
+        "Approval pending, please wait."
+      );
+      return;
+    }
     setSendMoneyModalOpen(true);
   };
   const closeSendMoneyModal = () => {
     setSendMoneyModalOpen(false);
   };
   const openCashOutModal = () => {
+    if (user.status !== "Verified") {
+      toast.error(
+        "Approval pending, please wait."
+      );
+      return;
+    }
     setCashOutModalOpen(true);
   };
   const closeCashOutModal = () => {
     setCashOutModalOpen(false);
   };
   const openCashInModal = () => {
+    if (user.status !== "Verified") {
+      toast.error(
+        "Approval pending, please wait."
+      );
+      return;
+    }
     setCashInModalOpen(true);
   };
   const closeCashInModal = () => {
     setCashInModalOpen(false);
   };
+  const handleAgent = async(id) => {
+    try {
+          const updatedUser = {
+            request: "Pending",
+          };
+          const response = await axios.put(
+            `http://localhost:9000/users/${id}`,
+            updatedUser
+          );
+          const reqUser = users?.map((user) =>
+            user._id === id ? { ...user, status: response.data.request } : user
+          );
+      setRequestData(reqUser)
+      
+      toast.success('Request sent')
+    }catch(error){
+      console.log(error)
+    }
+  }
+  console.log('from user Dashboard', user) 
+  // const handleStatus = async (id) => {
+  //   try {
+  //     const updatedUser = {
+  //       status: "Verified",
+  //       balance: 40,
+  //     };
+  //     const response = await axios.put(
+  //       `http://localhost:9000/users/${id}`,
+  //       updatedUser
+  //     );
+  //     const updatedUsers = users?.map((user) =>
+  //       user._id === id ? { ...user, status: response.data.status, balance: response.data.balance } : user
+  //     );
+  //     setUsers(updatedUsers);
+  //     toast.success("User verified successfully");
+  //   } catch (error) {
+  //     console.error("Error updating user status", error);
+  //   }
+  // };
   return (
     <div className="flex justify-center items-center min-h-screen w-full">
       <div className="flex flex-col gap-6 lg:gap-0 lg:flex-row w-[700px] border rounded-lg shadow-md overflow-hidden p-6">
@@ -61,6 +133,7 @@ const UserDashboard = ({ user }) => {
                 <MdVerified />
               </div>
             )}
+            <button onClick={()=>handleAgent(user?._id)} className="text-[12px] bg-[#007BFF] px-3 py-[2px] rounded-md mt-2 text-white font-medium">Become an Agent</button>
             <div className="text-gray-700 font-medium mt-3">
               <table>
                 <tr>
@@ -91,7 +164,7 @@ const UserDashboard = ({ user }) => {
         <div className="h-full w-full lg:w-1/2 p-6">
           <div className="flex justify-between items-center">
             <h3 className="text-gray-700 font-medium text-sm">
-              Total Balance : 00.00 BDT
+              Total Balance : {user.balance ? parseFloat(user?.balance).toFixed(2) : "00.00"} BDT
             </h3>
             {/* history button */}
             <button className="bg-[#bfdeff] px-3 py-1 rounded-full text-sm text-[#308cef] font-medium">
@@ -110,7 +183,10 @@ const UserDashboard = ({ user }) => {
                   </div>
                   <span>Send Money</span>
                 </div>
-                <SendMoney isOpen={isSendMoneyModalOpen} onRequestClose={closeSendMoneyModal} />
+                <SendMoney
+                  isOpen={isSendMoneyModalOpen}
+                  onRequestClose={closeSendMoneyModal}
+                />
               </div>
               <div>
                 <div
@@ -122,7 +198,10 @@ const UserDashboard = ({ user }) => {
                   </div>
                   <span>Cash-Out</span>
                 </div>
-                <CashOut isOpen={isCashOutModalOpen} onRequestClose={closeCashOutModal} />
+                <CashOut
+                  isOpen={isCashOutModalOpen}
+                  onRequestClose={closeCashOutModal}
+                />
               </div>
               <div>
                 <div
@@ -134,7 +213,10 @@ const UserDashboard = ({ user }) => {
                   </div>
                   <span>Cash-In</span>
                 </div>
-                <CashIn isOpen={isCashInModalOpen} onRequestClose={closeCashInModal} />
+                <CashIn
+                  isOpen={isCashInModalOpen}
+                  onRequestClose={closeCashInModal}
+                />
               </div>
             </div>
           </div>
