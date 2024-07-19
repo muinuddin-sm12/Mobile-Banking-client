@@ -44,7 +44,7 @@ const AdminDashboard = () => {
   },[allUser])
 
   const handleLogout = () => {
-    navigate("/dashboard");
+    navigate("/");
     toast.success("Successfully Logout");
   };
   const handleStatus = async (id) => {

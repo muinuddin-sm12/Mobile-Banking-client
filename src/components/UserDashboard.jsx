@@ -14,7 +14,7 @@ import axios from "axios";
 const UserDashboard = ({ user }) => {
   const [requestData, setRequestData] = useState([])
   const [users, setUsers] = useState([])
-  console.log(users, 'from user dashboard')
+  // console.log(users, 'from user dashboard')
   // const {name, email, number, image, status, role} = user;
   const navigate = useNavigate();
   const handleLogout = () => {
@@ -92,7 +92,7 @@ const UserDashboard = ({ user }) => {
       console.log(error)
     }
   }
-  console.log('from user Dashboard', user) 
+  // console.log('from user Dashboard', user) 
   // const handleStatus = async (id) => {
   //   try {
   //     const updatedUser = {

@@ -28,7 +28,7 @@ const Dashboard = () => {
   const currentUser = users.find(
     (user) => user?.email === email || user?.number === email
   );
-  // console.log(currentUser)
+//   console.log(currentUser)
   return (
     <div>
       {currentUser?.role === "Agent" && <AgentDashboard user={currentUser} />}

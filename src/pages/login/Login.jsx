@@ -17,11 +17,6 @@ const Login = () => {
     const fetchData = async () => {
       try {
         const usersResponse = await axios.get("http://localhost:9000/users");
-        // const requestsResponse = await axios.get(
-        //   "http://localhost:9000/requests"
-        // );
-        // const combinedData = [...usersResponse.data, ...requestsResponse.data];
-        // s etUsers(combinedData);
         setUsers(usersResponse.data)
       } catch (error) {
         toast.error("Error fetching data: " + error.message);

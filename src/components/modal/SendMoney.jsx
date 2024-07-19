@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Modal from "react-modal";
 
 // Set the app element for accessibility
@@ -6,14 +6,17 @@ Modal.setAppElement("#root");
 
 // eslint-disable-next-line react/prop-types
 const SendMoney = ({ isOpen, onRequestClose }) => {
-//   const [status, setStatus] = useState("");
   const [phone, setPhone] = useState("");
   const [amount, setAmount] = useState("");
   const [pin, setPin] = useState("");
   const handleSubmit = (event) => {
-    event.preventDefault();
+      event.preventDefault();
     // Handle form submission
-  
+    console.log(phone, amount, pin)
+
+    setPhone('');
+    setAmount('');
+    setPin('');
     onRequestClose();
   };
 
