@@ -17,13 +17,13 @@ const UserHistory = ({ isOpen, onRequestClose, user }) => {
 
         setTranHistory(currentUserHistory);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
 
     fetchData();
   }, []);
-  console.log(user);
+  // console.log(user);
   return (
     <Modal
       isOpen={isOpen}

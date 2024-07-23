@@ -15,17 +15,9 @@ const CashIn = ({ isOpen, onRequestClose, user }) => {
   const formattedDate = currentDate.toLocaleDateString();
   const formattedTime = currentDate.toLocaleTimeString();
 
-
   const handleSubmit = (event) => {
     event.preventDefault();
     // Handle form submission
-    console.log("Phone:", user?.number);
-    console.log("Amount:", amount);
-    console.log("Pin:", pin);
-    // if (amount > user?.balance) {
-    //   toast.error("Insufficient Balance");
-    //   return;
-    // }
     if (pin !== user.password) {
       toast.error("Incorrect Pin");
       return;
@@ -47,7 +39,7 @@ const CashIn = ({ isOpen, onRequestClose, user }) => {
           );
           toast.success("Request sent");
         } catch (error) {
-          console.log(error);
+          // console.log(error);
         }
       };
       handleRequest();
@@ -83,18 +75,6 @@ const CashIn = ({ isOpen, onRequestClose, user }) => {
     >
       <h2 className="mb-3 text-xl font-semibold text-center">Enter Details</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="phone">Phone Number:</label>
-          <br />
-          <input
-            type="text"
-            id="phone"
-            disabled
-            className="bg-[#dedee1] outline-none border rounded-lg px-2 py-1 text-sm font-medium"
-            placeholder={user?.number}
-            required
-          />
-        </div>
         <div>
           <label htmlFor="amount">Amount:</label>
           <br />

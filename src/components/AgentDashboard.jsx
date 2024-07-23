@@ -11,7 +11,8 @@ const AgentDashboard = ({ user }) => {
   const [cashInRequest, setCashInRequest] = useState([]);
   const [cashOutRequest, setCashOutRequest] = useState([]);
   const [currentUser, setCurrentUser] = useState([]);
-  const [cashIUser, setCashInUser] = useState([]);
+  const [cashInUser, setCashInUser] = useState([]);
+  const [cashOutUser, setCashOutUser] = useState([]);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -24,7 +25,7 @@ const AgentDashboard = ({ user }) => {
         const response = await axios.get("http://localhost:9000/users");
         setData(response.data);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     const fetchCashInRequests = async () => {
@@ -41,7 +42,7 @@ const AgentDashboard = ({ user }) => {
         setCashOutRequest(cashOutRequests);
         setCashInRequest(cashInRequests);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     fetchedData();
@@ -73,7 +74,7 @@ const AgentDashboard = ({ user }) => {
       const newAgentBalance =
         parseFloat(currentUser.balance) -
         parseFloat(transactionRequest.balance);
-      console.log(newAgentBalance);
+      // console.log(newAgentBalance);
       // Update agent balance
       const updateBalance = { balance: newAgentBalance };
       await axios.put(
@@ -92,9 +93,48 @@ const AgentDashboard = ({ user }) => {
       setCurrentUser({ ...currentUser, balance: newAgentBalance });
       toast.success("Transaction Successful");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }; 
+  const handleCashOut = async (id) => {
+    try {
+      // Fetch the transaction request details
+      const transactionResponse = await axios.get(
+        `http://localhost:9000/transactionRequests/${id}`
+      );
+      const transactionRequest = transactionResponse.data;
+      setCashOutUser(transactionRequest);
+      // Update transaction request status to 'Accepted'
+      const updateData = { status: "Accepted" };
+      await axios.put(
+        `http://localhost:9000/transactionRequests/${id}`,
+        updateData
+      );
+      // Calculate new agent balance
+      const newAgentBalance =
+        parseFloat(currentUser.balance) +
+        parseFloat(transactionRequest.balance);
+      // Update agent balance
+      const updateBalance = { balance: newAgentBalance };
+      await axios.put(
+        `http://localhost:9000/users/${currentUser._id}`,
+        updateBalance
+      );
+      // Fetch updated list of Cash-In requests
+      const response = await axios.get(
+        "http://localhost:9000/transactionRequests"
+      );
+      const cashInRequests = response.data.filter(
+        (c) => c.reqType === "Cash-Out"
+      );
+      // Update state
+      setCashOutRequest(cashInRequests);
+      setCurrentUser({ ...currentUser, balance: newAgentBalance });
+      toast.success("Transaction Successful");
+    } catch (error) {
+      // console.log(error);
+    }
+  }
 
   return (
     <div className="flex justify-center items-center w-full min-h-screen">
@@ -204,9 +244,8 @@ const AgentDashboard = ({ user }) => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {data?.status === "Pending" ? (
                         <div className="flex items-center gap-2">
-                          {/* <p className="font-medium">Pending</p> */}
                           <button
-                            // onClick={() => handleCashIn(data?._id)}
+                            onClick={() => handleCashOut(data?._id)}
                             className="bg-green-500 hover:bg-black text-white font-medium text-sm py-1 px-2 rounded"
                           >
                             Pending

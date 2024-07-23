@@ -25,7 +25,7 @@ const Login = () => {
     fetchData();
   }, []);
 
-  console.log(users);
+  // console.log(users);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const user = users.find(

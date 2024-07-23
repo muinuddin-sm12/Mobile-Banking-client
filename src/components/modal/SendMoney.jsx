@@ -22,7 +22,11 @@ const SendMoney = ({ isOpen, onRequestClose, user }) => {
     if (pin !== user.password) {
       toast.error("Incorrect Pin");
       return;
-    } else {
+    } else if(amount<50){
+      toast.error('You need to Send Money at least 50.00 BDT');
+      return;
+    }
+    else {
       const handleRequest = async () => {
         try {
           const requestData = {
@@ -38,10 +42,9 @@ const SendMoney = ({ isOpen, onRequestClose, user }) => {
             `http://localhost:9000/transactionRequests`,
             requestData
           );
-          console.log(requestData, 'from sendMoney modal')
           toast.success("Transaction Successful");
         } catch (error) { 
-          console.log(error);
+          // console.log(error);
         }
       };
       handleRequest();
@@ -53,7 +56,6 @@ const SendMoney = ({ isOpen, onRequestClose, user }) => {
     setPin("");
     onRequestClose();
   };
-  console.log(user.balance, user._id);
   return (
     <Modal
       isOpen={isOpen}
@@ -77,18 +79,6 @@ const SendMoney = ({ isOpen, onRequestClose, user }) => {
     >
       <h2 className="mb-3 text-xl font-semibold text-center">Enter Details</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="phone">Your Number:</label>
-          <br />
-          <input
-          disabled
-            type="text"
-            id="phone"
-            placeholder={user?.number}
-            className="bg-[#dedee1] outline-none border rounded-lg px-2 py-1 text-sm font-medium"
-            required
-          />
-        </div>
         <div>
           <label htmlFor="phone">Recieve Phone Number:</label>
           <br />

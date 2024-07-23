@@ -1,22 +1,56 @@
+/* eslint-disable react/prop-types */
+import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import Modal from "react-modal";
 
 // Set the app element for accessibility
 Modal.setAppElement("#root");
 
 // eslint-disable-next-line react/prop-types
-const CashOut = ({ isOpen, onRequestClose }) => {
-  const [phone, setPhone] = useState("");
+const CashOut = ({ isOpen, onRequestClose, user }) => {
   const [amount, setAmount] = useState("");
   const [pin, setPin] = useState("");
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleDateString();
+  const formattedTime = currentDate.toLocaleTimeString();
 
+  const calculatedAmount =
+    parseFloat(amount) + parseFloat((amount / 100) * 1.5);
+  // console.log(calculatedAmount)
   const handleSubmit = (event) => {
     event.preventDefault();
     // Handle form submission
-    console.log("Phone:", phone);
-    console.log("Amount:", amount);
-    console.log("Pin:", pin);
+    if (pin !== user.password) {
+      toast.error("Incorrect Pin");
+      return;
+    } else {
+      const handleRequest = async () => {
+        try {
+          const requestData = {
+            name: user?.name,
+            number: user?.number,
+            balance: calculatedAmount,
+            date: formattedDate,
+            reqType: "Cash-Out",
+            time: formattedTime,
+            status: "Pending",
+          };
+          await axios.post(
+            `http://localhost:9000/transactionRequests`,
+            requestData
+          );
+          toast.success("Request sent");
+        } catch (error) {
+          // console.log(error);
+        }
+      };
+      handleRequest();
+    }
+
     // Close the modal after submission
+    setAmount("");
+    setPin("");
     onRequestClose();
   };
 
@@ -43,18 +77,6 @@ const CashOut = ({ isOpen, onRequestClose }) => {
     >
       <h2 className="mb-3 text-xl font-semibold text-center">Enter Details</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="phone">Phone Number:</label>
-          <br />
-          <input
-            type="text"
-            id="phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="bg-[#dedee1] outline-none border rounded-lg px-2 py-1 text-sm font-medium"
-            required
-          />
-        </div>
         <div>
           <label htmlFor="amount">Amount:</label>
           <br />

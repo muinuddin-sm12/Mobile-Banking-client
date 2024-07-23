@@ -18,7 +18,10 @@ const UserDashboard = ({ user }) => {
   const [cashInRequest, setCashInRequest] = useState([]);
   const [sendMoneyRequest, setSendMoneyRequest] = useState([]);
   const [receiveSendMoney, setReceiveSendMoney] = useState([]);
-  const [initialUserBalance, setInitialUserBalance] = useState(parseFloat(user?.balance));  // let userBalance = parseFloat(user?.balance);
+  const [cashOutRequest, setCashOutRequest] = useState([]);
+  const [initialUserBalance, setInitialUserBalance] = useState(
+    parseFloat(user?.balance)
+  ); // let userBalance = parseFloat(user?.balance);
   const navigate = useNavigate();
   const handleLogout = () => {
     toast.success("Successfully Logout");
@@ -37,7 +40,7 @@ const UserDashboard = ({ user }) => {
         const { data } = await axios.get("http://localhost:9000/users");
         setUsers(data);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     const fetchCashInRequest = async () => {
@@ -46,56 +49,100 @@ const UserDashboard = ({ user }) => {
           "http://localhost:9000/transactionRequests"
         );
         const acceptedRequest = response.data?.filter(
-          (data) => data.status === "Accepted" && data?.number == user?.number
+          (data) => data.status === "Accepted" && data?.number == user?.number && data.reqType=== "Cash-In"
         );
         setCashInRequest(acceptedRequest);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
-    const fetchSendMoneyRequests = async () =>{
-      try{
-        const response = await axios.get('http://localhost:9000/transactionRequests');
-        const requests = response.data.filter((f) => f.reqType === 'Send-Money' && f.from === user.number)
-        setSendMoneyRequest(requests)
-      }catch(error){
-        console.log(error)
+    const fetchSendMoneyRequests = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:9000/transactionRequests"
+        );
+        const requests = response.data.filter(
+          (f) => f.reqType === "Send-Money" && f.from === user.number
+        );
+        setSendMoneyRequest(requests);
+      } catch (error) {
+        // console.log(error);
       }
-    }
-    const fetchReceiveSendMoney = async () =>{
-      try{
-        const response = await axios.get('http://localhost:9000/transactionRequests');
-        const requests = response.data.filter((f) => f.reqType === 'Send-Money' && f.to === user.number)
-        setReceiveSendMoney(requests)
-      }catch(error){
-        console.log(error)
+    };
+    const fetchReceiveSendMoney = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:9000/transactionRequests"
+        );
+        const requests = response.data.filter(
+          (f) => f.reqType === "Send-Money" && f.to === user.number
+        );
+        setReceiveSendMoney(requests);
+      } catch (error) {
+        // console.log(error);
       }
-    }
+    };
+    const fetchCashOut = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:9000/transactionRequests"
+        );
+        const requests = response.data.filter(
+          (data) => data.reqType === "Cash-Out" && data?.number == user?.number
+        );
+        setCashOutRequest(requests);
+      } catch (error) {
+        // console.log(error);
+      }
+    };
     fetch();
+    fetchCashOut();
     fetchCashInRequest();
     fetchSendMoneyRequests();
     fetchReceiveSendMoney();
   }, [user]);
-  console.log(cashInRequest, "cash in request");
-  console.log(sendMoneyRequest, "send money request");
+  // console.log(cashInRequest, "cash in request");
+  // console.log(sendMoneyRequest, "send money request");
 
+  const totalCashInBalance = useMemo(
+    () =>
+      cashInRequest.reduce((acc, item) => acc + parseFloat(item.balance), 0),
+    [cashInRequest]
+  );
 
-  const totalCashInBalance = useMemo(() => {
-    return cashInRequest.reduce((acc, item) => acc + parseFloat(item.balance), 0);
-  }, [cashInRequest]);
+  const totalReceiveSendMoney = useMemo(
+    () =>
+      receiveSendMoney.reduce((acc, item) => acc + parseFloat(item.balance), 0),
+    [receiveSendMoney]
+  );
 
-  const totalReceiveSendMoney = useMemo(() => {
-    return receiveSendMoney.reduce((acc, item) => acc + parseFloat(item.balance), 0);
-  }, [receiveSendMoney])
-  const totalSendMoneyBalance = useMemo(() => {
-    return sendMoneyRequest.reduce((acc, item) => acc + parseFloat(item.balance), 0);
-  }, [sendMoneyRequest]);
+  const totalSendMoneyBalance = useMemo(
+    () =>
+      sendMoneyRequest.reduce((acc, item) => acc + parseFloat(item.balance), 0),
+    [sendMoneyRequest]
+  );
 
-  const userBalance = useMemo(() => {
-    return initialUserBalance + totalCashInBalance - totalSendMoneyBalance + totalReceiveSendMoney;
-  }, [initialUserBalance, totalCashInBalance, totalSendMoneyBalance, totalReceiveSendMoney]);
+  const totalCashOutBalance = useMemo(
+    () =>
+      cashOutRequest.reduce((acc, item) => acc + parseFloat(item.balance), 0),
+    [cashOutRequest]
+  );
 
-
+  const userBalance = useMemo(
+    () =>
+      initialUserBalance +
+      totalCashInBalance -
+      totalSendMoneyBalance +
+      totalReceiveSendMoney -
+      (totalCashOutBalance*2),
+    [
+      initialUserBalance,
+      totalCashInBalance,
+      totalSendMoneyBalance,
+      totalReceiveSendMoney,
+      totalCashOutBalance,
+    ]
+  );
   const openSendMoneyModal = () => {
     if (user.status !== "Verified") {
       toast.error("Approval pending, please wait.");
@@ -148,7 +195,7 @@ const UserDashboard = ({ user }) => {
 
       toast.success("Request sent");
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -209,7 +256,8 @@ const UserDashboard = ({ user }) => {
         <div className="h-full w-full lg:w-1/2 p-6">
           <div className="flex justify-between items-center">
             <h3 className="text-gray-700 font-medium text-sm">
-              Total Balance : {user.balance ? userBalance : "00.00"} BDT
+              Total Balance : {user.balance ? userBalance.toFixed(2) : "00.00"}{" "}
+              BDT
             </h3>
             {/* history button */}
             <button
@@ -220,7 +268,7 @@ const UserDashboard = ({ user }) => {
             </button>
           </div>
           <UserHistory
-          user= {user}
+            user={user}
             isOpen={isUserModalOpen}
             onRequestClose={closeUserHistory}
           />
@@ -237,8 +285,8 @@ const UserDashboard = ({ user }) => {
                   <span>Send Money</span>
                 </div>
                 <SendMoney
-                balance={userBalance}
-                user={user}
+                  balance={userBalance}
+                  user={user}
                   isOpen={isSendMoneyModalOpen}
                   onRequestClose={closeSendMoneyModal}
                 />
@@ -254,7 +302,7 @@ const UserDashboard = ({ user }) => {
                   <span>Cash-Out</span>
                 </div>
                 <CashOut
-                user = {user}
+                  user={user}
                   isOpen={isCashOutModalOpen}
                   onRequestClose={closeCashOutModal}
                 />

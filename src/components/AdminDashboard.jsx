@@ -33,7 +33,7 @@ const AdminDashboard = () => {
             const response = await axios.get('http://localhost:9000/users')
             setAllUser(response.data)
         }catch(error){
-            console.log(error)
+            // console.log(error)
         }
     }
     fetch()
@@ -80,15 +80,13 @@ const AdminDashboard = () => {
       const updatedUsers = allUser?.map((user) =>
         user._id === id ? { ...user, status: response.data.role, request: response.data.request, balance: response.data.balance } : user
       );
-      console.log('update user', updatedUser)
+      // console.log('update user', updatedUser)
       setAllUser(updatedUsers);
       toast.success("User Become Agent");
     } catch (error) {
       console.error("Error updating user status", error);
     }
   };
-//   console.log('all agent requested', allUser)
-  console.log('all agent requested', agentRequests)
   return (
     <div className="flex justify-center items-center w-full min-h-screen">
       <div className="lg:w-[900px] h-[421px] rounded-lg flex shadow-md border overflow-hidden">
