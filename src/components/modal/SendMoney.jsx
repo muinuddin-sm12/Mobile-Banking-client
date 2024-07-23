@@ -1,25 +1,59 @@
-import { useRef, useState } from "react";
+/* eslint-disable react/prop-types */
+import axios from "axios";
+import { useState } from "react";
+import toast from "react-hot-toast";
 import Modal from "react-modal";
 
 // Set the app element for accessibility
 Modal.setAppElement("#root");
 
 // eslint-disable-next-line react/prop-types
-const SendMoney = ({ isOpen, onRequestClose }) => {
-  const [phone, setPhone] = useState("");
+const SendMoney = ({ isOpen, onRequestClose, user }) => {
+  const [from] = useState(user.number)
+  const [to, setTo] = useState("");
   const [amount, setAmount] = useState("");
   const [pin, setPin] = useState("");
-  const handleSubmit = (event) => {
-      event.preventDefault();
-    // Handle form submission
-    console.log(phone, amount, pin)
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleDateString();
+  const formattedTime = currentDate.toLocaleTimeString();
 
-    setPhone('');
-    setAmount('');
-    setPin('');
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (pin !== user.password) {
+      toast.error("Incorrect Pin");
+      return;
+    } else {
+      const handleRequest = async () => {
+        try {
+          const requestData = {
+            name: user?.name,
+            from: from,
+            to: to,
+            balance: amount,
+            date: formattedDate,
+            reqType: "Send-Money",
+            time: formattedTime,
+          };
+          await axios.post(
+            `http://localhost:9000/transactionRequests`,
+            requestData
+          );
+          console.log(requestData, 'from sendMoney modal')
+          toast.success("Transaction Successful");
+        } catch (error) { 
+          console.log(error);
+        }
+      };
+      handleRequest();
+    }
+
+    // Close the modal after submission
+    setTo("");
+    setAmount("");
+    setPin("");
     onRequestClose();
   };
-
+  console.log(user.balance, user._id);
   return (
     <Modal
       isOpen={isOpen}
@@ -44,13 +78,25 @@ const SendMoney = ({ isOpen, onRequestClose }) => {
       <h2 className="mb-3 text-xl font-semibold text-center">Enter Details</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="phone">Phone Number:</label>
+          <label htmlFor="phone">Your Number:</label>
+          <br />
+          <input
+          disabled
+            type="text"
+            id="phone"
+            placeholder={user?.number}
+            className="bg-[#dedee1] outline-none border rounded-lg px-2 py-1 text-sm font-medium"
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="phone">Recieve Phone Number:</label>
           <br />
           <input
             type="text"
             id="phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
             className="bg-[#dedee1] outline-none border rounded-lg px-2 py-1 text-sm font-medium"
             required
           />

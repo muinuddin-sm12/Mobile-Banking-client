@@ -1,24 +1,64 @@
+/* eslint-disable react/prop-types */
+import axios from "axios";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import Modal from "react-modal";
 
 // Set the app element for accessibility
 Modal.setAppElement("#root");
 
 // eslint-disable-next-line react/prop-types
-const CashIn = ({ isOpen, onRequestClose }) => {
-  const [phone, setPhone] = useState("");
+const CashIn = ({ isOpen, onRequestClose, user }) => {
   const [amount, setAmount] = useState("");
   const [pin, setPin] = useState("");
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleDateString();
+  const formattedTime = currentDate.toLocaleTimeString();
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
     // Handle form submission
-    console.log("Phone:", phone);
+    console.log("Phone:", user?.number);
     console.log("Amount:", amount);
     console.log("Pin:", pin);
+    // if (amount > user?.balance) {
+    //   toast.error("Insufficient Balance");
+    //   return;
+    // }
+    if (pin !== user.password) {
+      toast.error("Incorrect Pin");
+      return;
+    } else {
+      const handleRequest = async () => {
+        try {
+          const requestData = {
+            name: user?.name,
+            number: user?.number,
+            balance: amount,
+            date: formattedDate,
+            reqType: 'Cash-In',
+            time: formattedTime,
+            status: "Pending"
+          };
+          await axios.post(  
+            `http://localhost:9000/transactionRequests`,
+            requestData
+          );
+          toast.success("Request sent");
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      handleRequest();
+    }
+
     // Close the modal after submission
+    setAmount("");
+    setPin("");
     onRequestClose();
   };
+  // console.log(user)
 
   return (
     <Modal
@@ -49,9 +89,9 @@ const CashIn = ({ isOpen, onRequestClose }) => {
           <input
             type="text"
             id="phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            disabled
             className="bg-[#dedee1] outline-none border rounded-lg px-2 py-1 text-sm font-medium"
+            placeholder={user?.number}
             required
           />
         </div>

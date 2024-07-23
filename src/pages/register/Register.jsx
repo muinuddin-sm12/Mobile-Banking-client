@@ -27,14 +27,14 @@ const Register = () => {
       status: "Pending",
       role: "User",
     };
-    console.log(userData);
+    // console.log(userData);
 
     try {
-      const { data } = await axios.post(
+      await axios.post(
         "http://localhost:9000/users",
         userData
       );
-      console.log(data);
+      // console.log(data);
       toast.success("Register Successful");
       navigate("/");
     } catch (err) {
