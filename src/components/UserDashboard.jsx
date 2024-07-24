@@ -102,7 +102,6 @@ const UserDashboard = ({ user }) => {
     fetchReceiveSendMoney();
   }, [user]);
   // console.log(cashInRequest, "cash in request");
-  // console.log(sendMoneyRequest, "send money request");
 
   const totalCashInBalance = useMemo(
     () =>

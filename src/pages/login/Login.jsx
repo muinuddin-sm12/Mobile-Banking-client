@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import bcrypt from "bcryptjs";
 import { useEffect, useState } from "react";
 
 const Login = () => {
@@ -35,16 +36,17 @@ const Login = () => {
       toast.error("User not exist");
       return;
     }
-    if (user.password != pin) {
-      toast.error("Invalid Pin");
-      return;
-    }
     try {
+      const isMatch = await bcrypt.compare(pin, user.password);
+      if (!isMatch) {
+        toast.error("Invalid Pin");
+        return;
+      }
       // 1. sign in user
-      toast.success("Signup Successful");
+      toast.success("Login Successful");
       navigate("/dashboard", { state: { email } });
     } catch (err) {
-      toast.error(err.message);
+      toast.error("Error verifying password");
     }
   };
   return (

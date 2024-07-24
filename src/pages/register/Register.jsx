@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import bcrypt from 'bcryptjs';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -18,23 +19,22 @@ const Register = () => {
       toast.error("Password must be exactly 5 digits");
       return;
     }
-    const userData = {
-      name,
-      email,
-      number,
-      password,
-      image,
-      status: "Pending",
-      role: "User",
-    };
-    // console.log(userData);
-
     try {
-      await axios.post(
-        "http://localhost:9000/users",
-        userData
-      );
-      // console.log(data);
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+  
+      const userData = {
+        name,
+        email,
+        number,
+        password: hashedPassword,
+        image,
+        status: "Pending",
+        role: "User",
+      };
+  
+      await axios.post("http://localhost:9000/users", userData);
+  
       toast.success("Register Successful");
       navigate("/");
     } catch (err) {
