@@ -3,12 +3,13 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Modal from "react-modal";
+import bcrypt from "bcryptjs";
 
 // Set the app element for accessibility
 Modal.setAppElement("#root");
 
 // eslint-disable-next-line react/prop-types
-const CashOut = ({ isOpen, onRequestClose, user }) => {
+const CashOut = ({ isOpen, onRequestClose, user, balance }) => {
   const [amount, setAmount] = useState("");
   const [pin, setPin] = useState("");
   const currentDate = new Date();
@@ -20,33 +21,36 @@ const CashOut = ({ isOpen, onRequestClose, user }) => {
   // console.log(calculatedAmount)
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Handle form submission
-    if (pin !== user.password) {
-      toast.error("Incorrect Pin");
-      return;
-    } else {
-      const handleRequest = async () => {
-        try {
-          const requestData = {
-            name: user?.name,
-            number: user?.number,
-            balance: calculatedAmount,
-            date: formattedDate,
-            reqType: "Cash-Out",
-            time: formattedTime,
-            status: "Pending",
-          };
-          await axios.post(
-            `http://localhost:9000/transactionRequests`,
-            requestData
-          );
-          toast.success("Request sent");
-        } catch (error) {
-          // console.log(error);
+    const handleRequest = async () => {
+      try {
+        const isMatch = await bcrypt.compare(pin, user?.password)
+        if(!isMatch){
+          toast.error("Invalid Pin");
+          return;
         }
-      };
-      handleRequest();
-    }
+        if(amount>balance){
+          toast.error('You do not have sufficient balance.')
+          return;
+        }
+        const requestData = {
+          name: user?.name,
+          number: user?.number,
+          balance: calculatedAmount,
+          date: formattedDate,
+          reqType: "Cash-Out",
+          time: formattedTime,
+          status: "Pending",
+        };
+        await axios.post(
+          `http://localhost:9000/transactionRequests`,
+          requestData
+        );
+        toast.success("Request sent");
+      } catch (error) {
+        // console.log(error);
+      }
+    };
+    handleRequest();
 
     // Close the modal after submission
     setAmount("");

@@ -49,7 +49,10 @@ const UserDashboard = ({ user }) => {
           "http://localhost:9000/transactionRequests"
         );
         const acceptedRequest = response.data?.filter(
-          (data) => data.status === "Accepted" && data?.number == user?.number && data.reqType=== "Cash-In"
+          (data) =>
+            data.status === "Accepted" &&
+            data?.number == user?.number &&
+            data.reqType === "Cash-In"
         );
         setCashInRequest(acceptedRequest);
       } catch (error) {
@@ -133,7 +136,7 @@ const UserDashboard = ({ user }) => {
       totalCashInBalance -
       totalSendMoneyBalance +
       totalReceiveSendMoney -
-      (totalCashOutBalance*2),
+      totalCashOutBalance,
     [
       initialUserBalance,
       totalCashInBalance,
@@ -301,6 +304,7 @@ const UserDashboard = ({ user }) => {
                   <span>Cash-Out</span>
                 </div>
                 <CashOut
+                  balance={userBalance}
                   user={user}
                   isOpen={isCashOutModalOpen}
                   onRequestClose={closeCashOutModal}

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Modal from "react-modal";
+import bcrypt from "bcryptjs";
 
 // Set the app element for accessibility
 Modal.setAppElement("#root");
@@ -18,32 +19,36 @@ const CashIn = ({ isOpen, onRequestClose, user }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     // Handle form submission
-    if (pin !== user.password) {
-      toast.error("Incorrect Pin");
-      return;
-    } else {
-      const handleRequest = async () => {
-        try {
-          const requestData = {
-            name: user?.name,
-            number: user?.number,
-            balance: amount,
-            date: formattedDate,
-            reqType: 'Cash-In',
-            time: formattedTime,
-            status: "Pending"
-          };
-          await axios.post(  
-            `http://localhost:9000/transactionRequests`,
-            requestData
-          );
-          toast.success("Request sent");
-        } catch (error) {
-          // console.log(error);
+    // if (pin !== user.password) {
+    //   toast.error("Incorrect Pin");
+    //   return;
+    // }
+    const handleRequest = async () => {
+      try {
+        const isMatch = await bcrypt.compare(pin, user.password);
+        if (!isMatch) {
+          toast.error("Invalid Pin");
+          return;
         }
-      };
-      handleRequest();
-    }
+        const requestData = {
+          name: user?.name,
+          number: user?.number,
+          balance: amount,
+          date: formattedDate,
+          reqType: "Cash-In",
+          time: formattedTime,
+          status: "Pending",
+        };
+        await axios.post(
+          `http://localhost:9000/transactionRequests`,
+          requestData
+        );
+        toast.success("Request sent");
+      } catch (error) {
+        // console.log(error);
+      }
+    };
+    handleRequest();
 
     // Close the modal after submission
     setAmount("");

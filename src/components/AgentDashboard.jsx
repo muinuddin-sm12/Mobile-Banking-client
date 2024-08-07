@@ -65,7 +65,7 @@ const AgentDashboard = ({ user }) => {
       const transactionRequest = transactionResponse.data;
       setCashInUser(transactionRequest);
       // Update transaction request status to 'Accepted'
-      const updateData = { status: "Accepted" };
+      const updateData = { status: "Accepted", acceptAgent: user?.number };
       await axios.put(
         `http://localhost:9000/transactionRequests/${id}`,
         updateData
@@ -95,7 +95,7 @@ const AgentDashboard = ({ user }) => {
     } catch (error) {
       // console.log(error);
     }
-  }; 
+  };
   const handleCashOut = async (id) => {
     try {
       // Fetch the transaction request details
@@ -105,7 +105,7 @@ const AgentDashboard = ({ user }) => {
       const transactionRequest = transactionResponse.data;
       setCashOutUser(transactionRequest);
       // Update transaction request status to 'Accepted'
-      const updateData = { status: "Accepted" };
+      const updateData = { status: "Accepted", acceptAgent: user?.number};
       await axios.put(
         `http://localhost:9000/transactionRequests/${id}`,
         updateData
@@ -134,8 +134,8 @@ const AgentDashboard = ({ user }) => {
     } catch (error) {
       // console.log(error);
     }
-  }
-
+  };
+  // console.log(user.number)
   return (
     <div className="flex justify-center items-center w-full min-h-screen">
       <div className="w-[900px] h-[421px] rounded-lg shadow-md border flex flex-col lg:flex-row overflow-hidden">
@@ -205,7 +205,9 @@ const AgentDashboard = ({ user }) => {
               </h3>
             </div>
             {/* Cash-Out  */}
-            <p className="mt-6 text-sm font-semibold">Cash-Out Requests</p>
+            <p className="mt-6 text-sm font-semibold inline-block">
+              Cash-Out Requests
+            </p>
             <table className="min-w-full divide-y text-sm divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
@@ -227,39 +229,43 @@ const AgentDashboard = ({ user }) => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {cashOutRequest?.map((data) => (
-                  <tr key={data._id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {data?.name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {data?.number}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {data?.balance}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {data?.reqType}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {data?.status === "Pending" ? (
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => handleCashOut(data?._id)}
-                            className="bg-green-500 hover:bg-black text-white font-medium text-sm py-1 px-2 rounded"
-                          >
-                            Pending
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2">
-                          <p className="font-medium text-gray-500">Accepted</p>
-                          <GoCheckCircleFill />
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                {cashOutRequest
+                  ?.sort((a) => (a.status === "Pending" ? -1 : 1))
+                  .map((data) => (
+                    <tr key={data._id}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.number}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.balance}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.reqType}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.status === "Pending" ? (
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => handleCashOut(data?._id)}
+                              className="bg-green-500 hover:bg-black text-white font-medium text-sm py-1 px-2 rounded"
+                            >
+                              Pending
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <p className="font-medium text-gray-500">
+                              Accepted
+                            </p>
+                            <GoCheckCircleFill className="text-green-500" />
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
             {/* Cash-In  */}
@@ -285,40 +291,44 @@ const AgentDashboard = ({ user }) => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {cashInRequest?.map((data) => (
-                  <tr key={data._id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {data?.name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {data?.number}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {data?.balance}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {data?.reqType}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {data?.status === "Pending" ? (
-                        <div className="flex items-center gap-2">
-                          {/* <p className="font-medium">Pending</p> */}
-                          <button
-                            onClick={() => handleCashIn(data?._id)}
-                            className="bg-green-500 hover:bg-black text-white font-medium text-sm py-1 px-2 rounded"
-                          >
-                            Pending
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2">
-                          <p className="font-medium text-gray-500">Accepted</p>
-                          <GoCheckCircleFill />
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                {cashInRequest
+                  ?.sort((a) => (a.status === "Pending" ? -1 : 1))
+                  .map((data) => (
+                    <tr key={data._id}>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.number}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.balance}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.reqType}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {data?.status === "Pending" ? (
+                          <div className="flex items-center gap-2">
+                            {/* <p className="font-medium">Pending</p> */}
+                            <button
+                              onClick={() => handleCashIn(data?._id)}
+                              className="bg-green-500 hover:bg-black text-white font-medium text-sm py-1 px-2 rounded"
+                            >
+                              Pending
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <p className="font-medium text-gray-500">
+                              Accepted
+                            </p>
+                            <GoCheckCircleFill className="text-green-500" />
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

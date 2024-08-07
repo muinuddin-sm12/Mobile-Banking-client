@@ -3,12 +3,13 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Modal from "react-modal";
+import bcrypt from "bcryptjs";
 
 // Set the app element for accessibility
 Modal.setAppElement("#root");
 
 // eslint-disable-next-line react/prop-types
-const SendMoney = ({ isOpen, onRequestClose, user }) => {
+const SendMoney = ({ isOpen, onRequestClose, user, balance }) => {
   const [from] = useState(user.number)
   const [to, setTo] = useState("");
   const [amount, setAmount] = useState("");
@@ -19,16 +20,22 @@ const SendMoney = ({ isOpen, onRequestClose, user }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (pin !== user.password) {
-      toast.error("Incorrect Pin");
-      return;
-    } else if(amount<50){
+    if(amount<50){
       toast.error('You need to Send Money at least 50.00 BDT');
+      return;
+    }
+    if(amount>balance){
+      toast.error('You do not have enough balance.');
       return;
     }
     else {
       const handleRequest = async () => {
         try {
+          const isMatch = await bcrypt.compare(pin, user?.password)
+          if(!isMatch){
+            toast.error('Invalid Pin')
+            return;
+          }
           const requestData = {
             name: user?.name,
             from: from,
