@@ -45,15 +45,15 @@ const Register = () => {
 
   return (
     <div className="flex justify-center items-center py-10 ">
-      <div className="flex flex-col lg:w-[360px] max-w-md p-6 border shadow-md rounded-lg overflow-hidden text-gray-900">
+      <div className="flex flex-col lg:w-[360px] max-w-md p-6 border shadow-md rounded-lg overflow-hidden">
         <div className="mb-8 text-center">
-          <h1 className="my-3 text-4xl font-bold">Register</h1>
+          <h1 className="my-3 text-4xl font-bold text-white">Register</h1>
           <p className="text-sm text-gray-400">Welcome to Mobile Banking</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
+          <div className="space-y-1">
             <div>
-              <label htmlFor="email" className="block mb-2 text-sm">
+              <label htmlFor="email" className="block mb-1 text-gray-300 text-sm">
                 Name
               </label>
               <input
@@ -67,7 +67,7 @@ const Register = () => {
               />
             </div>
             <div>
-              <label htmlFor="image" className="block mb-2 text-sm">
+              <label htmlFor="image" className="block mb-1 text-gray-300 text-sm">
                 Image URL
               </label>
               <input
@@ -80,7 +80,7 @@ const Register = () => {
               />
             </div>
             <div>
-              <label htmlFor="email" className="block mb-2 text-sm">
+              <label htmlFor="email" className="block mb-1 text-gray-300 text-sm">
                 Email address
               </label>
               <input
@@ -94,7 +94,7 @@ const Register = () => {
               />
             </div>
             <div>
-              <label htmlFor="number" className="block mb-2 text-sm">
+              <label htmlFor="number" className="block mb-1 text-gray-300 text-sm">
                 Phone Number
               </label>
               <input
@@ -108,7 +108,7 @@ const Register = () => {
             </div>
             <div>
               <div className="flex justify-between">
-                <label htmlFor="password" className="text-sm mb-2">
+                <label htmlFor="password" className="text-sm mb-1 text-gray-300">
                   PIN
                 </label>
               </div>
@@ -134,11 +134,11 @@ const Register = () => {
         <div className="flex items-center pt-4 space-x-1">
           <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
         </div>
-        <p className="px-6 text-sm text-center text-gray-400">
+        <p className="px-6 text-sm text-center text-gray-200">
           Already have an account?{" "}
           <Link
             to="/"
-            className="hover:underline hover:text-[#007BFF] text-gray-600"
+            className="hover:underline hover:text-[#007BFF] text-gray-400"
           >
             Login
           </Link>

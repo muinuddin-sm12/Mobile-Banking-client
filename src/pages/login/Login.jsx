@@ -6,26 +6,21 @@ import { useEffect, useState } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
-  // const [users, setUsers] = useState([]);
   const [users, setUsers] = useState({ users: [], requests: [] });
   const [email, setEmail] = useState("");
   const [pin, setPin] = useState("");
-  // const [loggedinUser, setLoggedinUser] = useState("")
-
-  // console.log('email:' ,email)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const usersResponse = await axios.get("http://localhost:9000/users");
-        setUsers(usersResponse.data)
+        setUsers(usersResponse.data);
       } catch (error) {
         toast.error("Error fetching data: " + error.message);
       }
     };
     fetchData();
   }, []);
-
   // console.log(users);
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,10 +46,10 @@ const Login = () => {
   };
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <div className="rounded-lg overflow-hidden sm:m-10 shadow-md">
-        <div className="flex flex-col lg:w-[360px] max-w-md border p-6 text-gray-900">
+      <div className="sm:m-10 shadow-md">
+        <div className="flex flex-col lg:w-[360px] max-w-md border-[1px] p-6 rounded-lg">
           <div className="mb-8 text-center">
-            <h1 className="my-3 text-4xl font-bold">Log In</h1>
+            <h1 className="my-3 text-4xl text-white font-bold">Log In</h1>
             <p className="text-sm text-gray-400">
               Sign in to access your account
             </p>
@@ -65,7 +60,7 @@ const Login = () => {
           >
             <div>
               <div>
-                <label htmlFor="email" className="block mb-2 text-sm">
+                <label htmlFor="email" className="block mb-1 text-gray-300 text-sm">
                   Email or Phone
                 </label>
                 <input
@@ -80,7 +75,7 @@ const Login = () => {
               </div>
               <div>
                 <div className="flex justify-between">
-                  <label htmlFor="password" className="text-sm mb-2">
+                  <label htmlFor="password" className="text-sm text-gray-300 mb-1">
                     Pin
                   </label>
                 </div>
@@ -113,11 +108,11 @@ const Login = () => {
             <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
             <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
           </div>
-          <p className="px-6 text-sm text-center text-gray-400">
+          <p className="px-6 text-sm text-center text-gray-200">
             Don&apos;t have an account yet?{" "}
             <Link
               to="/register"
-              className="hover:underline hover:text-[#007BFF] text-gray-600"
+              className="hover:underline hover:text-[#007BFF] text-gray-400"
             >
               Register
             </Link>

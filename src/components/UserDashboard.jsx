@@ -203,8 +203,8 @@ const UserDashboard = ({ user }) => {
 
   return (
     <div className="flex justify-center items-center min-h-screen w-full">
-      <div className="flex flex-col gap-6 lg:gap-0 lg:flex-row w-[700px] border rounded-lg shadow-md overflow-hidden p-6">
-        <div className="w-full lg:w-1/2 bg-blue-100 p-6 rounded-l-xl overflow-hidden">
+      <div className="flex flex-col md:gap-0 md:flex-row w-[700px] rounded-lg shadow-md p-6">
+        <div className="w-full lg:w-1/2 bg-blue-100 p-6 md:rounded-l-xl overflow-hidden">
           <h1 className="text-2xl font-semibold text-center mb-8">
             Personal Information
           </h1>
@@ -255,9 +255,9 @@ const UserDashboard = ({ user }) => {
             </div>
           </div>
         </div>
-        <div className="h-full w-full lg:w-1/2 p-6">
+        <div className="w-full lg:w-1/2 border md:rounded-r-xl p-6">
           <div className="flex justify-between items-center">
-            <h3 className="text-gray-700 font-medium text-sm">
+            <h3 className="text-gray-300 font-medium text-sm">
               Total Balance : {user.balance ? userBalance.toFixed(2) : "00.00"}{" "}
               BDT
             </h3>
@@ -284,7 +284,7 @@ const UserDashboard = ({ user }) => {
                   <div>
                     <img className="h-8 " src={sendMoney} alt="" />
                   </div>
-                  <span>Send Money</span>
+                  <span className="text-gray-300">Send Money</span>
                 </div>
                 <SendMoney
                   balance={userBalance}
@@ -301,7 +301,7 @@ const UserDashboard = ({ user }) => {
                   <div>
                     <img className="h-8 " src={cashOut} alt="" />
                   </div>
-                  <span>Cash-Out</span>
+                  <span className="text-gray-300">Cash-Out</span>
                 </div>
                 <CashOut
                   balance={userBalance}
@@ -318,7 +318,7 @@ const UserDashboard = ({ user }) => {
                   <div>
                     <img className="h-8 " src={cashIn} alt="" />
                   </div>
-                  <span>Cash-In</span>
+                  <span className="text-gray-300">Cash-In</span>
                 </div>
                 <CashIn
                   user={user}

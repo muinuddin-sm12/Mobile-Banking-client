@@ -49,7 +49,7 @@ const SendMoney = ({ isOpen, onRequestClose, user, balance }) => {
             `http://localhost:9000/transactionRequests`,
             requestData
           );
-          toast.success("Transaction Successful");
+          toast.success("Transaction successful. Please wait a moment.");
         } catch (error) { 
           // console.log(error);
         }

@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { IoMdSearch } from "react-icons/io";
 import { FaCrown } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Transactions from "./modal/Transactions";
 
 const AdminDashboard = () => {
   const [allUser, setAllUser] = useState([]);
@@ -13,6 +14,8 @@ const AdminDashboard = () => {
   const [userr] = useState([]);
   const [adminData, setAdminData] = useState("");
   const navigate = useNavigate();
+
+  const [isTransactionModalOpen, setTransactionModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -105,11 +108,17 @@ const AdminDashboard = () => {
       console.error("Error updating user status", error);
     }
   };
+  const openTransactions = () => {
+    setTransactionModalOpen(true);
+  };
+  const closeTransactions = () => {
+    setTransactionModalOpen(false);
+  };
   return (
     <div className="flex justify-center items-center w-full min-h-screen">
-      <div className="lg:w-[900px] h-[421px] rounded-lg flex shadow-md border overflow-hidden">
+      <div className="lg:w-[900px] h-auto md:h-[421px] md:rounded-lg flex flex-col md:flex-row shadow-md border overflow-hidden p-6">
         <div className="lg:w-[300px] p-6">
-          <h1 className="text-2xl font-semibold text-center mb-8">
+          <h1 className="text-2xl font-semibold text-white text-center mb-8">
             Personal Information
           </h1>
           <div className="flex flex-col items-center">
@@ -126,7 +135,7 @@ const AdminDashboard = () => {
                 <FaCrown />
               </div>
             )}
-            <div className="text-gray-700 font-medium mt-3">
+            <div className="text-gray-300 font-medium mt-3">
               <table>
                 <tr>
                   <td>Name</td>
@@ -153,23 +162,21 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="lg:w-[600px] overflow-auto">
-          <div className=" bg-[#90c4fd] p-6 flex justify-center">
-            <div className="flex items-center border w-[400px] rounded-full overflow-hidden">
-              <input
-                type="text"
-                name=""
-                id=""
-                className="w-full p-2 pl-4 outline-none"
-                placeholder="Search by Name"
-              />
-              <div className="px-4 text-lg">
-                <IoMdSearch />
-              </div>
+        <div className="lg:w-[600px] h-screen md:h-auto overflow-auto">
+          <div className=" pt-10 overflow-y-auto">
+            <div className="flex justify-between mb-2 relative">
+              <h1 className="text-gray-200 font-medium">Manage Users</h1>
+              <button
+                onClick={openTransactions}
+                className="bg-[#007BFF] absolute right-0 top-[-22px] px-3 py-1 rounded-lg text-sm text-white font-medium"
+              >
+                Transactions
+              </button>
             </div>
-          </div>
-          <div className="p-6 overflow-y-auto">
-            <h1 className=" font-medium">Manage Users</h1>
+            <Transactions
+              isOpen={isTransactionModalOpen}
+              onRequestClose={closeTransactions}
+            />
             {/* manage users */}
             <div className="overflow-x-auto mb-6">
               <table className="min-w-full divide-y text-sm divide-gray-200">
@@ -187,40 +194,42 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {users?.sort((a) => (a.status === "Pending" ? -1 : 1)).map((data) => (
-                    <tr key={data._id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {data?.name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {data?.email}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {data?.status === "Pending" ? (
-                          <div className="flex items-center gap-2">
-                            <p className="font-medium">Pending</p>
-                            <button
-                              onClick={() => handleStatus(data?._id)}
-                              className="bg-green-500 hover:bg-black text-white font-medium text-sm py-1 px-2 rounded"
-                            >
-                              Approve
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-2">
-                            <p className="font-medium text-gray-700 text-sm">
-                              Verified
-                            </p>
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                  {users
+                    ?.sort((a) => (a.status === "Pending" ? -1 : 1))
+                    .map((data) => (
+                      <tr key={data._id}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {data?.name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {data?.email}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {data?.status === "Pending" ? (
+                            <div className="flex items-center gap-2">
+                              <p className="font-medium">Pending</p>
+                              <button
+                                onClick={() => handleStatus(data?._id)}
+                                className="bg-green-500 hover:bg-black text-white font-medium text-sm py-1 px-2 rounded"
+                              >
+                                Approve
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2">
+                              <p className="font-medium text-gray-700 text-sm">
+                                Verified
+                              </p>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
 
-            <h1 className=" font-medium">Agent Requests</h1>
+            <h1 className="text-gray-200 mb-2 font-medium">Agent Requests</h1>
             {/* Agent Request  */}
             <div className="overflow-x-auto mb-6">
               <table className="min-w-full divide-y text-sm divide-gray-200">
@@ -238,87 +247,38 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {agentRequests?.sort((a) => (a.status === "Pending" ? -1 : 1)).map((data) => (
-                    <tr key={data._id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {data?.name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {data?.email}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {data?.request === "Pending" ? (
-                          <div className="flex items-center gap-2">
-                            {/* <p className="font-medium">Pending</p> */}
-                            <button
-                              onClick={() => handleRole(data?._id)}
-                              className="bg-green-500 hover:bg-black text-white font-medium text-sm py-1 px-2 rounded"
-                            >
-                              Accept
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-2">
-                            <p className="font-medium text-gray-700 text-sm">
-                              Accepted
-                            </p>
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                  {agentRequests
+                    ?.sort((a) => (a.status === "Pending" ? -1 : 1))
+                    .map((data) => (
+                      <tr key={data._id}>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {data?.name}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {data?.email}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {data?.request === "Pending" ? (
+                            <div className="flex items-center gap-2">
+                              {/* <p className="font-medium">Pending</p> */}
+                              <button
+                                onClick={() => handleRole(data?._id)}
+                                className="bg-green-500 hover:bg-black text-white font-medium text-sm py-1 px-2 rounded"
+                              >
+                                Accept
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-2">
+                              <p className="font-medium text-gray-700 text-sm">
+                                Accepted
+                              </p>
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
-              </table>
-            </div>
-
-            <h1 className=" font-medium">History</h1>
-            {/* Transaction history */}
-            <div className="overflow-x-auto mb-6">
-              <table className="min-w-full divide-y text-sm divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Name
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Email
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                  </tr>
-                </thead>
-                {/* <tbody className="bg-white divide-y divide-gray-200">
-                  {users?.map((data) => (
-                    <tr key={data._id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {data?.name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {data?.email}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {data?.status === "Pending" ? (
-                          <div className="flex items-center gap-2">
-                            <p className="font-medium">Pending</p>
-                            <button
-                            //   onClick={() => handleStatus(data?._id)}
-                              className="bg-green-500 hover:bg-black text-white font-medium text-sm py-1 px-2 rounded"
-                            >
-                              Approve
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-2">
-                            <p className="font-medium text-gray-700 text-sm">
-                              Verified
-                            </p>
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody> */}
               </table>
             </div>
           </div>

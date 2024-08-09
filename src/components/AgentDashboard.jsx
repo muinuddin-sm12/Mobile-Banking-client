@@ -137,10 +137,10 @@ const AgentDashboard = ({ user }) => {
   };
   // console.log(user.number)
   return (
-    <div className="flex justify-center items-center w-full min-h-screen">
-      <div className="w-[900px] h-[421px] rounded-lg shadow-md border flex flex-col lg:flex-row overflow-hidden">
-        <div className="p-6 w-full lg:w-[320px] bg-blue-100">
-          <div className="w-full p-6 lg:w-[300px] bg-purple-300rounded-l-xl overflow-hidden">
+    <div className="flex justify-center items-center min-h-screen w-full">
+      <div className="max-w-[900px] min-h-[421px] shadow-md flex flex-col md:flex-row justify-center  p-6">
+        <div className="p-6 w-full md:w-[420px] md:rounded-l-xl bg-blue-100">
+          <div className="w-full p-6 lg:w-[300px] rounded-l-xl">
             <h1 className="text-2xl font-semibold text-center mb-8">
               Personal Information
             </h1>
@@ -186,15 +186,15 @@ const AgentDashboard = ({ user }) => {
             </div>
           </div>
         </div>
-        <div className="p-6 flex-1 overflow-x-auto">
-          <h1 className="text-xl font-medium text-center">Agent Dashboard</h1>
+        <div className="p-6 w-full overflow-x-auto border md:rounded-r-xl">
+          <h1 className="text-2xl text-white font-medium text-center">Agent Dashboard</h1>
           {/* manage transaction */}
           <div className="overflow-x-auto overflow-y-auto mt-10">
-            <div className="text-sm font-medium flex justify-between items-center mb-3 text-[#4189d6]">
+            <div className="text-sm font-medium flex flex-col-reverse gap-3 md:gap-0 md:flex-row  justify-between items-start md:items-center md:mb-3 text-[#4189d6]">
               <h3 className="px-3 py-1 border rounded-full bg-[#afd5fd]">
                 Manage Transaction
               </h3>
-              <h3 className="text-black ">
+              <h3 className="text-gray-300 ">
                 Total balance:{" "}
                 <span>
                   {user.balance
@@ -205,7 +205,7 @@ const AgentDashboard = ({ user }) => {
               </h3>
             </div>
             {/* Cash-Out  */}
-            <p className="mt-6 text-sm font-semibold inline-block">
+            <p className="mt-6 text-sm text-gray-200 font-semibold inline-block">
               Cash-Out Requests
             </p>
             <table className="min-w-full divide-y text-sm divide-gray-200">
@@ -269,7 +269,7 @@ const AgentDashboard = ({ user }) => {
               </tbody>
             </table>
             {/* Cash-In  */}
-            <p className="mt-6 text-sm font-semibold">Cash-In Requests</p>
+            <p className="mt-6 text-sm text-gray-200 font-semibold">Cash-In Requests</p>
             <table className="min-w-full divide-y text-sm divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>

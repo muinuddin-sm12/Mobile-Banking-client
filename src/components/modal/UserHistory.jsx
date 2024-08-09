@@ -103,7 +103,7 @@ const UserHistory = ({ isOpen, onRequestClose, user }) => {
                 {data?.date}{" "}
                 <span className="text-[12px] text-gray-700">{data?.time}</span>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap">{data?.from} </td>
+              <td className="px-6 py-4 whitespace-nowrap">{data?.to} </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span className="text-red-500 font-semibold">
                   -{data?.balance}
