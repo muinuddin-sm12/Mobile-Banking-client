@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { IoMdSearch } from "react-icons/io";
 import { FaCrown } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Transactions from "./modal/Transactions";
@@ -116,8 +115,8 @@ const AdminDashboard = () => {
   };
   return (
     <div className="flex justify-center items-center w-full min-h-screen">
-      <div className="lg:w-[900px] h-auto md:h-[421px] md:rounded-lg flex flex-col md:flex-row shadow-md border overflow-hidden p-6">
-        <div className="lg:w-[300px] p-6">
+      <div className="lg:w-[900px] h-auto md:h-[421px]  flex flex-col md:flex-row overflow-hidden p-6">
+        <div className="lg:w-[300px] bg-[rgba(88,228,228,0.1)] md:rounded-l-xl p-6">
           <h1 className="text-2xl font-semibold text-white text-center mb-8">
             Personal Information
           </h1>
@@ -162,8 +161,8 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="lg:w-[600px] h-screen md:h-auto overflow-auto">
-          <div className=" pt-10 overflow-y-auto">
+        <div className="lg:w-[600px] h-screen md:h-auto bg-[rgba(59,72,139,0.11)] overflow-auto">
+          <div className="p-6 pt-10 overflow-y-auto">
             <div className="flex justify-between mb-2 relative">
               <h1 className="text-gray-200 font-medium">Manage Users</h1>
               <button
@@ -178,28 +177,28 @@ const AdminDashboard = () => {
               onRequestClose={closeTransactions}
             />
             {/* manage users */}
-            <div className="overflow-x-auto mb-6">
-              <table className="min-w-full divide-y text-sm divide-gray-200">
-                <thead className="bg-gray-50">
+            <div className="overflow-x-auto mb-6 ">
+              <table className="min-w-full divide-y text-sm divide-gray-900">
+                <thead className="bg-gray-900 text-gray-300">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                       Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                       Email
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                       Status
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-gray-800 divide-y divide-gray-700 text-gray-200">
                   {users
                     ?.sort((a) => (a.status === "Pending" ? -1 : 1))
-                    .map((data) => (
+                    .map((data, index) => (
                       <tr key={data._id}>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          {data?.name}
+                          <span>{index+1}. </span> {data?.name}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {data?.email}
@@ -217,7 +216,7 @@ const AdminDashboard = () => {
                             </div>
                           ) : (
                             <div className="flex items-center gap-2">
-                              <p className="font-medium text-gray-700 text-sm">
+                              <p className="font-medium text-gray-200 text-sm">
                                 Verified
                               </p>
                             </div>
@@ -232,27 +231,27 @@ const AdminDashboard = () => {
             <h1 className="text-gray-200 mb-2 font-medium">Agent Requests</h1>
             {/* Agent Request  */}
             <div className="overflow-x-auto mb-6">
-              <table className="min-w-full divide-y text-sm divide-gray-200">
-                <thead className="bg-gray-50">
+              <table className="min-w-full divide-y text-sm divide-gray-900">
+                <thead className="bg-gray-900 text-gray-300 ">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Email
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Request
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-gray-800 divide-y divide-gray-700 text-gray-200">
                   {agentRequests
                     ?.sort((a) => (a.status === "Pending" ? -1 : 1))
-                    .map((data) => (
+                    .map((data, index) => (
                       <tr key={data._id}>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          {data?.name}
+                        <span>{index+1}. </span> {data?.name}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {data?.email}
@@ -270,7 +269,7 @@ const AdminDashboard = () => {
                             </div>
                           ) : (
                             <div className="flex items-center gap-2">
-                              <p className="font-medium text-gray-700 text-sm">
+                              <p className="font-medium text-gray-200 text-sm">
                                 Accepted
                               </p>
                             </div>

@@ -135,13 +135,12 @@ const AgentDashboard = ({ user }) => {
       // console.log(error);
     }
   };
-  // console.log(user.number)
   return (
     <div className="flex justify-center items-center min-h-screen w-full">
-      <div className="max-w-[900px] min-h-[421px] shadow-md flex flex-col md:flex-row justify-center  p-6">
-        <div className="p-6 w-full md:w-[420px] md:rounded-l-xl bg-blue-100">
+      <div className="max-w-[900px] min-h-[421px] flex flex-col md:flex-row justify-center overflow-hidden  p-6">
+        <div className="p-6 w-full md:w-[420px] md:rounded-l-xl bg-[rgba(88,228,228,0.1)]">
           <div className="w-full p-6 lg:w-[300px] rounded-l-xl">
-            <h1 className="text-2xl font-semibold text-center mb-8">
+            <h1 className="text-2xl font-medium text-gray-200 text-center mb-8">
               Personal Information
             </h1>
             <div className="flex flex-col items-center">
@@ -158,7 +157,7 @@ const AgentDashboard = ({ user }) => {
                   <MdVerified />
                 </div>
               )}
-              <div className="text-gray-700 font-medium mt-3">
+              <div className="text-gray-300 font-medium mt-3">
                 <table>
                   <tr>
                     <td>Name</td>
@@ -186,10 +185,10 @@ const AgentDashboard = ({ user }) => {
             </div>
           </div>
         </div>
-        <div className="p-6 w-full overflow-x-auto border md:rounded-r-xl">
-          <h1 className="text-2xl text-white font-medium text-center">Agent Dashboard</h1>
+        <div className="p-6 w-full overflow-hidden bg-[rgba(59,72,139,0.11)] md:rounded-r-xl">
+          <h1 className="text-2xl text-gray-200 font-medium text-center">Agent Dashboard</h1>
           {/* manage transaction */}
-          <div className="overflow-x-auto overflow-y-auto mt-10">
+          <div className="overflow-y-auto overflow-x-auto mt-10">
             <div className="text-sm font-medium flex flex-col-reverse gap-3 md:gap-0 md:flex-row  justify-between items-start md:items-center md:mb-3 text-[#4189d6]">
               <h3 className="px-3 py-1 border rounded-full bg-[#afd5fd]">
                 Manage Transaction
@@ -205,30 +204,30 @@ const AgentDashboard = ({ user }) => {
               </h3>
             </div>
             {/* Cash-Out  */}
-            <p className="mt-6 text-sm text-gray-200 font-semibold inline-block">
+            <p className="mt-6 mb-1 text-sm text-gray-200 font-semibold inline-block">
               Cash-Out Requests
             </p>
-            <table className="min-w-full divide-y text-sm divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className="min-w-full divide-y text-sm divide-gray-300">
+              <thead className="bg-gray-700">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Phone
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Amount
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Request Type
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Status
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-gray-300  divide-y divide-gray-200">
                 {cashOutRequest
                   ?.sort((a) => (a.status === "Pending" ? -1 : 1))
                   .map((data) => (
@@ -269,28 +268,28 @@ const AgentDashboard = ({ user }) => {
               </tbody>
             </table>
             {/* Cash-In  */}
-            <p className="mt-6 text-sm text-gray-200 font-semibold">Cash-In Requests</p>
-            <table className="min-w-full divide-y text-sm divide-gray-200">
-              <thead className="bg-gray-50">
+            <p className="mt-6 mb-1 text-sm text-gray-200 font-semibold">Cash-In Requests</p>
+            <table className="min-w-full divide-y text-sm divide-gray-300">
+              <thead className="bg-gray-700">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Phone
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Amount
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Request Type
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                     Status
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-gray-300 divide-y divide-gray-200">
                 {cashInRequest
                   ?.sort((a) => (a.status === "Pending" ? -1 : 1))
                   .map((data) => (

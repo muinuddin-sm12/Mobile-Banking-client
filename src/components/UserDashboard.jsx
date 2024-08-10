@@ -203,9 +203,9 @@ const UserDashboard = ({ user }) => {
 
   return (
     <div className="flex justify-center items-center min-h-screen w-full">
-      <div className="flex flex-col md:gap-0 md:flex-row w-[700px] rounded-lg shadow-md p-6">
-        <div className="w-full lg:w-1/2 bg-blue-100 p-6 md:rounded-l-xl overflow-hidden">
-          <h1 className="text-2xl font-semibold text-center mb-8">
+      <div className="flex flex-col md:gap-0 md:flex-row w-[700px]">
+        <div className="w-full lg:w-1/2 bg-[rgba(88,228,228,0.1)] p-6 md:rounded-l-xl overflow-hidden">
+          <h1 className="text-2xl text-gray-200 font-semibold text-center mb-8">
             Personal Information
           </h1>
           <div className="flex flex-col items-center">
@@ -228,7 +228,7 @@ const UserDashboard = ({ user }) => {
             >
               Become an Agent
             </button>
-            <div className="text-gray-700 font-medium mt-3">
+            <div className="text-gray-300 font-medium mt-3">
               <table>
                 <tr>
                   <td>Name</td>
@@ -255,8 +255,8 @@ const UserDashboard = ({ user }) => {
             </div>
           </div>
         </div>
-        <div className="w-full lg:w-1/2 border md:rounded-r-xl p-6">
-          <div className="flex justify-between items-center">
+        <div className="w-full min-h-[450px] bg-[rgba(59,72,139,0.11)] md:h-auto lg:w-1/2 md:rounded-r-xl p-6">
+          <div className="flex justify-between items-center mb-10 md:mb-12">
             <h3 className="text-gray-300 font-medium text-sm">
               Total Balance : {user.balance ? userBalance.toFixed(2) : "00.00"}{" "}
               BDT

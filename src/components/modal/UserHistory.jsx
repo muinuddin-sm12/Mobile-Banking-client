@@ -5,7 +5,6 @@ import Modal from "react-modal";
 Modal.setAppElement("#root");
 // eslint-disable-next-line react/prop-types
 const UserHistory = ({ isOpen, onRequestClose, user }) => {
-  // const [history] = useState([]);
   const [receiveSendmoneyHistory, setReceiveSendmoneyHistory] = useState([]);
   const [sendSendmoneyHistory, setsendSendmoneyHistory] = useState([]);
   const [cashInHistory, setCashInHistory] = useState([]);
@@ -39,8 +38,7 @@ const UserHistory = ({ isOpen, onRequestClose, user }) => {
     };
 
     fetchData();
-  }, []);
-  // console.log(tranHistory);
+  }, [user]);
   return (
     <Modal
       isOpen={isOpen}
@@ -57,8 +55,8 @@ const UserHistory = ({ isOpen, onRequestClose, user }) => {
           bottom: "auto",
           marginRight: "-50%",
           transform: "translate(-50%, -50%)",
-          padding: "20px",
-          borderRadius: "4px",
+          padding: "10px 2px",
+          borderRadius: "10px",
         },
       }}
     >
@@ -80,83 +78,81 @@ const UserHistory = ({ isOpen, onRequestClose, user }) => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {receiveSendmoneyHistory?.map((data) => (
-            <tr key={data._id}>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {data?.date}{" "}
-                <span className="text-[12px] text-gray-700">{data?.time}</span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">{data?.from} </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className="text-green-500 font-semibold">
-                  +{data?.balance}
-                </span>{" "}
-                <span className="text-[12px] font-semibold text-gray-600">
-                  (Receive Money)
-                </span>
-              </td>
-            </tr>
-          ))}
-          {sendSendmoneyHistory?.map((data) => (
-            <tr key={data._id}>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {data?.date}{" "}
-                <span className="text-[12px] text-gray-700">{data?.time}</span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">{data?.to} </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className="text-red-500 font-semibold">
-                  -{data?.balance}
-                </span>{" "}
-                <span className="text-[12px] font-semibold text-gray-600">
-                  (Send Money)
-                </span>
-              </td>
-            </tr>
-          ))}
-          {cashInHistory?.map((data) => (
-            <tr key={data._id}>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {data?.date}{" "}
-                <span className="text-[12px] text-gray-700">{data?.time}</span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {data?.acceptAgent}{" "}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className="text-green-500 font-semibold">
-                  +{data?.balance}
-                </span>{" "}
-                <span className="text-[12px] font-semibold text-gray-600">
-                  (Cash In)
-                </span>
-              </td>
-            </tr>
-          ))}
-          {cashOutHistory?.map((data) => (
-            <tr key={data._id}>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {data?.date}{" "}
-                <span className="text-[12px] text-gray-700">{data?.time}</span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {data?.acceptAgent}{" "}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span className="text-red-500 font-semibold">
-                  -{data?.balance}
-                </span>{" "}
-                <span className="text-[12px] font-semibold text-gray-600">
-                  (Cash Out)
-                </span>
-              </td>
-            </tr>
-          ))}
+          {[
+            ...receiveSendmoneyHistory,
+            ...sendSendmoneyHistory,
+            ...cashInHistory,
+            ...cashOutHistory,
+          ]?.map((data, index) => {
+            const isReceive = receiveSendmoneyHistory?.includes(data);
+            const isSend = sendSendmoneyHistory?.includes(data);
+            const isCashIn = cashInHistory?.includes(data);
+            const isCashOut = cashOutHistory?.includes(data);
+
+            return (
+              <tr key={data._id}>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <span>{index + 1}. </span>
+                  {data?.date}{" "}
+                  <span className="text-[12px] text-gray-700">
+                    {data?.time}
+                  </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {isReceive && data?.from}
+                  {isSend && data?.to}
+                  {(isCashIn || isCashOut) && data?.acceptAgent}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {isReceive && (
+                    <>
+                      <span className="text-green-500 font-semibold">
+                        +{data?.balance}
+                      </span>{" "}
+                      <span className="text-[12px] font-semibold text-gray-600">
+                        (Receive Money)
+                      </span>
+                    </>
+                  )}
+                  {isSend && (
+                    <>
+                      <span className="text-red-500 font-semibold">
+                        -{data?.balance}
+                      </span>{" "}
+                      <span className="text-[12px] font-semibold text-gray-600">
+                        (Send Money)
+                      </span>
+                    </>
+                  )}
+                  {isCashIn && (
+                    <>
+                      <span className="text-green-500 font-semibold">
+                        +{data?.balance}
+                      </span>{" "}
+                      <span className="text-[12px] font-semibold text-gray-600">
+                        (Cash In)
+                      </span>
+                    </>
+                  )}
+                  {isCashOut && (
+                    <>
+                      <span className="text-red-500 font-semibold">
+                        -{data?.balance}
+                      </span>{" "}
+                      <span className="text-[12px] font-semibold text-gray-600">
+                        (Cash Out)
+                      </span>
+                    </>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center py-2 items-center">
         <button
-          className="border px-2 py-1 rounded-lg border-red-600 text-[12px] font-medium"
+          className="border px-2 py-1 rounded-lg hover:scale-105 transition-all bg-red-500 text-white text-[12px] font-medium"
           onClick={onRequestClose}
           style={{ marginTop: "10px" }}
         >
