@@ -33,7 +33,7 @@ const Register = () => {
         role: "User",
       };
   
-      await axios.post("http://localhost:9000/users", userData);
+      await axios.post("https://mobile-banking-server-smoky.vercel.app/users", userData);
   
       toast.success("Register Successful");
       navigate("/");

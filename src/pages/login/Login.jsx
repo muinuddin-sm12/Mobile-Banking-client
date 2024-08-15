@@ -13,7 +13,7 @@ const Login = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const usersResponse = await axios.get("http://localhost:9000/users");
+        const usersResponse = await axios.get("https://mobile-banking-server-smoky.vercel.app/users");
         setUsers(usersResponse.data);
       } catch (error) {
         toast.error("Error fetching data: " + error.message);
@@ -40,10 +40,14 @@ const Login = () => {
       // 1. sign in user
       toast.success("Login Successful");
       navigate("/dashboard", { state: { email } });
+
+      const response = await axios.post("https://mobile-banking-server-smoky.vercel.app/jwt", {email}, {withCredentials: true} );
+      console.log(response.data);
     } catch (err) {
       toast.error("Error verifying password");
     }
   };
+  // console.log(email)
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="sm:m-10 shadow-md">
@@ -60,7 +64,10 @@ const Login = () => {
           >
             <div>
               <div>
-                <label htmlFor="email" className="block mb-1 text-gray-300 text-sm">
+                <label
+                  htmlFor="email"
+                  className="block mb-1 text-gray-300 text-sm"
+                >
                   Email or Phone
                 </label>
                 <input
@@ -75,7 +82,10 @@ const Login = () => {
               </div>
               <div>
                 <div className="flex justify-between">
-                  <label htmlFor="password" className="text-sm text-gray-300 mb-1">
+                  <label
+                    htmlFor="password"
+                    className="text-sm text-gray-300 mb-1"
+                  >
                     Pin
                   </label>
                 </div>

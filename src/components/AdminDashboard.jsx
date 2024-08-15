@@ -19,7 +19,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get("http://localhost:9000/users");
+        const { data } = await axios.get("https://mobile-banking-server-smoky.vercel.app/users");
         const userData = data.filter(
           (f) => f.role === "User" || f.role === "Agent"
         );
@@ -35,7 +35,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const response = await axios.get("http://localhost:9000/users");
+        const response = await axios.get("https://mobile-banking-server-smoky.vercel.app/users");
         setAllUser(response.data);
       } catch (error) {
         // console.log(error)
@@ -61,7 +61,7 @@ const AdminDashboard = () => {
         balance: 40,
       };
       const response = await axios.put(
-        `http://localhost:9000/users/${id}`,
+        `https://mobile-banking-server-smoky.vercel.app/users/${id}`,
         updatedUser
       );
       const updatedUsers = users?.map((u) =>
@@ -87,7 +87,7 @@ const AdminDashboard = () => {
         balance: 40000,
       };
       const response = await axios.put(
-        `http://localhost:9000/users/${id}`,
+        `https://mobile-banking-server-smoky.vercel.app/users/${id}`,
         updatedUser
       );
       const updatedUsers = allUser?.map((user) =>
@@ -115,7 +115,7 @@ const AdminDashboard = () => {
   };
   return (
     <div className="flex justify-center items-center w-full min-h-screen">
-      <div className="lg:w-[900px] h-auto md:h-[421px]  flex flex-col md:flex-row overflow-hidden p-6">
+      <div className="lg:w-[900px] h-auto md:h-[480px]  flex flex-col md:flex-row overflow-hidden p-6">
         <div className="lg:w-[300px] bg-[rgba(88,228,228,0.1)] md:rounded-l-xl p-6">
           <h1 className="text-2xl font-semibold text-white text-center mb-8">
             Personal Information
@@ -179,7 +179,7 @@ const AdminDashboard = () => {
             {/* manage users */}
             <div className="overflow-x-auto mb-6 ">
               <table className="min-w-full divide-y text-sm divide-gray-900">
-                <thead className="bg-gray-900 text-gray-300">
+                <thead className="bg-[rgba(88,228,228,0.1)] text-gray-300">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                       Name
@@ -192,7 +192,7 @@ const AdminDashboard = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="bg-gray-800 divide-y divide-gray-700 text-gray-200">
+                <tbody className="bg-gray-800 text-gray-300  divide-y divide-gray-700 ">
                   {users
                     ?.sort((a) => (a.status === "Pending" ? -1 : 1))
                     .map((data, index) => (
@@ -232,7 +232,7 @@ const AdminDashboard = () => {
             {/* Agent Request  */}
             <div className="overflow-x-auto mb-6">
               <table className="min-w-full divide-y text-sm divide-gray-900">
-                <thead className="bg-gray-900 text-gray-300 ">
+                <thead className="bg-[rgba(88,228,228,0.1)] text-gray-300 text-gray-300 ">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
                       Name

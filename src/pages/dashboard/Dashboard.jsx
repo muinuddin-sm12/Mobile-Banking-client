@@ -15,7 +15,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get("http://localhost:9000/users");
+        const { data } = await axios.get("https://mobile-banking-server-smoky.vercel.app/users");
         setUsers(data);
       } catch (error) {
         toast.error(error);

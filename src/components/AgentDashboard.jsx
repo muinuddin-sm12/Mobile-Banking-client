@@ -22,7 +22,7 @@ const AgentDashboard = ({ user }) => {
   useEffect(() => {
     const fetchedData = async () => {
       try {
-        const response = await axios.get("http://localhost:9000/users");
+        const response = await axios.get("https://mobile-banking-server-smoky.vercel.app/users");
         setData(response.data);
       } catch (error) {
         // console.log(error);
@@ -31,7 +31,7 @@ const AgentDashboard = ({ user }) => {
     const fetchCashInRequests = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:9000/transactionRequests"
+          "https://mobile-banking-server-smoky.vercel.app/transactionRequests"
         );
         const cashInRequests = response.data.filter(
           (c) => c.reqType === "Cash-In"
@@ -60,14 +60,14 @@ const AgentDashboard = ({ user }) => {
     try {
       // Fetch the transaction request details
       const transactionResponse = await axios.get(
-        `http://localhost:9000/transactionRequests/${id}`
+        `https://mobile-banking-server-smoky.vercel.app/transactionRequests/${id}`
       );
       const transactionRequest = transactionResponse.data;
       setCashInUser(transactionRequest);
       // Update transaction request status to 'Accepted'
       const updateData = { status: "Accepted", acceptAgent: user?.number };
       await axios.put(
-        `http://localhost:9000/transactionRequests/${id}`,
+        `https://mobile-banking-server-smoky.vercel.app/transactionRequests/${id}`,
         updateData
       );
       // Calculate new agent balance
@@ -78,12 +78,12 @@ const AgentDashboard = ({ user }) => {
       // Update agent balance
       const updateBalance = { balance: newAgentBalance };
       await axios.put(
-        `http://localhost:9000/users/${currentUser._id}`,
+        `https://mobile-banking-server-smoky.vercel.app/users/${currentUser._id}`,
         updateBalance
       );
       // Fetch updated list of Cash-In requests
       const response = await axios.get(
-        "http://localhost:9000/transactionRequests"
+        "https://mobile-banking-server-smoky.vercel.app/transactionRequests"
       );
       const cashInRequests = response.data.filter(
         (c) => c.reqType === "Cash-In"
@@ -100,14 +100,14 @@ const AgentDashboard = ({ user }) => {
     try {
       // Fetch the transaction request details
       const transactionResponse = await axios.get(
-        `http://localhost:9000/transactionRequests/${id}`
+        `https://mobile-banking-server-smoky.vercel.app/transactionRequests/${id}`
       );
       const transactionRequest = transactionResponse.data;
       setCashOutUser(transactionRequest);
       // Update transaction request status to 'Accepted'
       const updateData = { status: "Accepted", acceptAgent: user?.number};
       await axios.put(
-        `http://localhost:9000/transactionRequests/${id}`,
+        `https://mobile-banking-server-smoky.vercel.app/transactionRequests/${id}`,
         updateData
       );
       // Calculate new agent balance
@@ -117,12 +117,12 @@ const AgentDashboard = ({ user }) => {
       // Update agent balance
       const updateBalance = { balance: newAgentBalance };
       await axios.put(
-        `http://localhost:9000/users/${currentUser._id}`,
+        `https://mobile-banking-server-smoky.vercel.app/users/${currentUser._id}`,
         updateBalance
       );
       // Fetch updated list of Cash-In requests
       const response = await axios.get(
-        "http://localhost:9000/transactionRequests"
+        "https://mobile-banking-server-smoky.vercel.app/transactionRequests"
       );
       const cashInRequests = response.data.filter(
         (c) => c.reqType === "Cash-Out"
@@ -137,7 +137,7 @@ const AgentDashboard = ({ user }) => {
   };
   return (
     <div className="flex justify-center items-center min-h-screen w-full">
-      <div className="max-w-[900px] min-h-[421px] flex flex-col md:flex-row justify-center overflow-hidden  p-6">
+      <div className="max-w-[900px] h-[1100px] md:h-[480px] flex flex-col md:flex-row justify-center overflow-hidden  p-6">
         <div className="p-6 w-full md:w-[420px] md:rounded-l-xl bg-[rgba(88,228,228,0.1)]">
           <div className="w-full p-6 lg:w-[300px] rounded-l-xl">
             <h1 className="text-2xl font-medium text-gray-200 text-center mb-8">
@@ -185,12 +185,12 @@ const AgentDashboard = ({ user }) => {
             </div>
           </div>
         </div>
-        <div className="p-6 w-full overflow-hidden bg-[rgba(59,72,139,0.11)] md:rounded-r-xl">
+        <div className="p-6 w-full h-screen md:h-auto overflow-auto bg-[rgba(59,72,139,0.11)] md:rounded-r-xl">
           <h1 className="text-2xl text-gray-200 font-medium text-center">Agent Dashboard</h1>
           {/* manage transaction */}
           <div className="overflow-y-auto overflow-x-auto mt-10">
             <div className="text-sm font-medium flex flex-col-reverse gap-3 md:gap-0 md:flex-row  justify-between items-start md:items-center md:mb-3 text-[#4189d6]">
-              <h3 className="px-3 py-1 border rounded-full bg-[#afd5fd]">
+              <h3 className="px-3 py-1 border rounded-full bg-[rgba(88,228,228,0.1)]">
                 Manage Transaction
               </h3>
               <h3 className="text-gray-300 ">
@@ -208,31 +208,32 @@ const AgentDashboard = ({ user }) => {
               Cash-Out Requests
             </p>
             <table className="min-w-full divide-y text-sm divide-gray-300">
-              <thead className="bg-gray-700">
+              <thead className="bg-[rgba(88,228,228,0.1)]">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-100 uppercase tracking-wider">
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-100 uppercase tracking-wider">
                     Phone
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-100 uppercase tracking-wider">
                     Amount
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-100 uppercase tracking-wider">
                     Request Type
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-100 uppercase tracking-wider">
                     Status
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-gray-300  divide-y divide-gray-200">
+              <tbody className="bg-gray-800 text-gray-300  divide-y divide-gray-200">
                 {cashOutRequest
                   ?.sort((a) => (a.status === "Pending" ? -1 : 1))
-                  .map((data) => (
+                  .map((data, index) => (
                     <tr key={data._id}>
                       <td className="px-6 py-4 whitespace-nowrap">
+                        <span>{index+1}.{" "}</span>
                         {data?.name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -270,31 +271,32 @@ const AgentDashboard = ({ user }) => {
             {/* Cash-In  */}
             <p className="mt-6 mb-1 text-sm text-gray-200 font-semibold">Cash-In Requests</p>
             <table className="min-w-full divide-y text-sm divide-gray-300">
-              <thead className="bg-gray-700">
+              <thead className="bg-[rgba(88,228,228,0.1)]">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-100 uppercase tracking-wider">
                     Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-100 uppercase tracking-wider">
                     Phone
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-100 uppercase tracking-wider">
                     Amount
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-100 uppercase tracking-wider">
                     Request Type
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-100 uppercase tracking-wider">
                     Status
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-gray-300 divide-y divide-gray-200">
+              <tbody className="bg-gray-800 text-gray-300  divide-y divide-gray-200">
                 {cashInRequest
                   ?.sort((a) => (a.status === "Pending" ? -1 : 1))
-                  .map((data) => (
+                  .map((data, index) => (
                     <tr key={data._id}>
                       <td className="px-6 py-4 whitespace-nowrap">
+                        <span>{index+1}. {" "}</span>
                         {data?.name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">

@@ -46,7 +46,7 @@ const SendMoney = ({ isOpen, onRequestClose, user, balance }) => {
             time: formattedTime,
           };
           await axios.post(
-            `http://localhost:9000/transactionRequests`,
+            `https://mobile-banking-server-smoky.vercel.app/transactionRequests`,
             requestData
           );
           toast.success("Transaction successful. Please wait a moment.");

@@ -42,7 +42,7 @@ const CashOut = ({ isOpen, onRequestClose, user, balance }) => {
           status: "Pending",
         };
         await axios.post(
-          `http://localhost:9000/transactionRequests`,
+          `https://mobile-banking-server-smoky.vercel.app/transactionRequests`,
           requestData
         );
         toast.success("Request sent");

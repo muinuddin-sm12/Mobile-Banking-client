@@ -37,7 +37,7 @@ const UserDashboard = ({ user }) => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const { data } = await axios.get("http://localhost:9000/users");
+        const { data } = await axios.get("https://mobile-banking-server-smoky.vercel.app/users");
         setUsers(data);
       } catch (error) {
         // console.log(error);
@@ -46,7 +46,7 @@ const UserDashboard = ({ user }) => {
     const fetchCashInRequest = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:9000/transactionRequests"
+          "https://mobile-banking-server-smoky.vercel.app/transactionRequests"
         );
         const acceptedRequest = response.data?.filter(
           (data) =>
@@ -62,7 +62,7 @@ const UserDashboard = ({ user }) => {
     const fetchSendMoneyRequests = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:9000/transactionRequests"
+          "https://mobile-banking-server-smoky.vercel.app/transactionRequests"
         );
         const requests = response.data.filter(
           (f) => f.reqType === "Send-Money" && f.from === user.number
@@ -75,7 +75,7 @@ const UserDashboard = ({ user }) => {
     const fetchReceiveSendMoney = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:9000/transactionRequests"
+          "https://mobile-banking-server-smoky.vercel.app/transactionRequests"
         );
         const requests = response.data.filter(
           (f) => f.reqType === "Send-Money" && f.to === user.number
@@ -88,7 +88,7 @@ const UserDashboard = ({ user }) => {
     const fetchCashOut = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:9000/transactionRequests"
+          "https://mobile-banking-server-smoky.vercel.app/transactionRequests"
         );
         const requests = response.data.filter(
           (data) => data.reqType === "Cash-Out" && data?.number == user?.number
@@ -187,7 +187,7 @@ const UserDashboard = ({ user }) => {
         request: "Pending",
       };
       const response = await axios.put(
-        `http://localhost:9000/users/${id}`,
+        `https://mobile-banking-server-smoky.vercel.app/users/${id}`,
         updatedUser
       );
       const reqUser = users?.map((user) =>

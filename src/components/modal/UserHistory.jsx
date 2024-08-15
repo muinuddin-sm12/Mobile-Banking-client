@@ -13,7 +13,7 @@ const UserHistory = ({ isOpen, onRequestClose, user }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:9000/transactionRequests"
+          "https://mobile-banking-server-smoky.vercel.app/transactionRequests"
         );
         const receiveSendmoneyHistory = response.data.filter(
           (f) => f.to === user?.number
